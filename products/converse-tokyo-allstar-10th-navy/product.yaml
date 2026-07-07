@@ -1,0 +1,118 @@
+# BuzzBuzz 產品資料檔
+# 編輯此檔案後，請 Claude 檢查或推送到 Shopify
+#
+# 狀態說明：
+#   draft    — 剛開始填寫，資訊不完整
+#   review   — 已填完，待你審核
+#   ready    — 審核通過，可以推送
+#   published — 已推送到 Shopify
+
+# === 基本資訊 ===
+status: review              # draft | review | ready | published
+brand_jp: "コンバース トウキョウ"
+brand_en: "CONVERSE TOKYO"
+product_name: "CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋（女款）"
+product_type: "潮流服飾"     # 分類清單裡沒有專屬「鞋類」，暫歸潮流服飾
+shopify_category: "服飾與配件 > 鞋類 > 運動鞋"
+
+# === 價格 ===
+# 資料來源：converse-tokyo.jp 官方商品頁（型號 A2854PSH900），2026-07-08 查證
+cost_jpy: 19800             # 日本官網定價（含稅），即實際下單成本
+price_twd: 5980             # ⚠️ 建議售價，操作者請確認/調整 — 依成本(≈NT$3,921，匯率5.05換算)抓約52%毛利估算，尚未計入運費/關稅（自有物流報價未定案，未列入計算）
+price_tw_ref: 0             # 此為10週年限定款，台灣無此確切型號可比價，不填假數字。一般 CONVERSE ALL STAR OX 台灣官方價約 NT$1,580-1,900（非同款，僅供參考，見 price_gap_note）
+price_gap_note: "此為 CONVERSE TOKYO 品牌10週年紀念限定款，台灣完全沒有官方或代理通路販售（一般 Converse 台灣官方有賣，但『CONVERSE TOKYO』這條日本限定線沒有），價值在於稀缺性與限定性，而非與同款的直接台日價差對比。"
+
+# === 規格 ===
+variants:
+  - option: "顏色"
+    values: ["深藍 Navy"]
+  - option: "尺寸"
+    values: ["22.5cm（US 3.5）", "23.0cm（US 4）", "23.5cm（US 4.5）", "24.5cm（US 6）", "25.0cm（US 6.5）"]
+
+material: "鞋面：美國工作服用帆布（洗水加工）／鞋底：橡膠"
+dimensions: ""              # 官網未提供，鞋類通常以尺碼表示，非長寬高
+weight_g: 0                 # 官網未提供
+country_of_origin: 日本
+
+# === 標籤與屬性 ===
+japan_exclusive: true
+season: "全年"
+gender: "Women"
+style_tags: ["復古", "街頭", "限定", "工裝"]
+
+# === 庫存狀態 ===
+stock_status: pre_order
+sourcing_status: limited    # 10週年紀念限定款，非常態庫存
+
+# ============================================
+# ▼ 以下由 Claude 填寫（AI 生成繁中內容）
+# ============================================
+
+# --- SEO 與頁面標題 ---
+title_zh: "日本 CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 女款 | BuzzBuzz 日本選物"
+
+seo_title: "CONVERSE TOKYO 10週年限定深藍帆布鞋 日本直送｜BuzzBuzz"
+seo_meta: "CONVERSE TOKYO 品牌10週年紀念別注款，美國工作服帆布洗水加工，台灣無官方通路，日本直送預購，正品保證。BuzzBuzz日本選物直送台灣。"
+
+# --- 商品描述（三段式 Fact-Feel-Trust） ---
+description_fact: "CONVERSE TOKYO 為紀念品牌設立10週年推出的別注款 ALL STAR J OX，型號 A2854PSH900。鞋面採用美國工作服用帆布並做洗水加工，呈現做舊質感；內裡印有10週年紀念標誌，鞋舌處為 ALL STAR 與 CONVERSE TOKYO 雙標設計。日本官網定價 ¥19,800（含稅），原產地日本，目前僅推出深藍色，尺碼 22.5cm–25.0cm（US 3.5–6.5，24cm 尺碼官網未提供）。"
+
+description_feel: "深藍帆布搭配洗水做舊處理，比一般全新帆布鞋多了一點穿舊的隨性感，很適合牛仔褲、工裝褲這類美式休閒穿搭，也能壓一下過於甜美的洋裝造型增加街頭感。10週年紀念的內裡標誌和雙標鞋舌是這款最大的收藏亮點，喜歡 Converse 但想找一雙台灣買不到、不會撞鞋的人會特別有感。"
+
+description_trust: "本商品由 BuzzBuzz 直接向 CONVERSE TOKYO 官方網站下單取得，非平行輸入或二手商品，正品保證。採預購直送制，訂單成立後才向日本下單，實際到貨時間依日本出貨與國際配送時程而定。依 CONVERSE TOKYO 官方販售條款，此商品原則上不接受退貨，下單前請務必確認尺寸與顏色；商品到貨如有明顯瑕疵或誤送，請於收到後盡快與我們聯繫。"
+
+# --- 圖片 Alt Text（每張圖都要有） ---
+alt_texts:
+  "images/photo-main.jpg": "CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 正面成對照，附10週年紀念徽章與WOMEN'S字樣"
+  "images/photo-1.jpg": "CONVERSE TOKYO 10週年紀念限定深藍帆布鞋 穿搭示意，搭配西裝褲與星星圖案襪"
+  "images/photo-2.jpg": "CONVERSE TOKYO 10週年紀念限定深藍帆布鞋 穿搭示意，交疊俯視角度"
+  "images/photo-3.jpg": "CONVERSE TOKYO 10週年紀念限定深藍帆布鞋 後跟穿搭特寫"
+  "images/photo-4.jpg": "CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 左右成對45度角照"
+  "images/photo-5.jpg": "CONVERSE TOKYO 10週年紀念限定款 鞋舌雙標與內裡 MADE IN JAPAN 標籤俯視照"
+  "images/photo-6.jpg": "CONVERSE TOKYO 10週年紀念限定款 鞋舌雙標與內裡標籤特寫近拍"
+  "images/photo-7.jpg": "CONVERSE TOKYO 10週年紀念限定款 鞋跟 ALL STAR MADE IN JAPAN 印字特寫"
+
+# --- FAQ（至少 3 組，AI 搜尋特別喜歡引用 FAQ） ---
+faq:
+  - q: "台灣買得到這雙鞋嗎？"
+    a: "目前 CONVERSE TOKYO 沒有在台灣設官方或代理通路，這款是日本國內限定的10週年紀念鞋款，只能透過日本直送預購取得。"
+  - q: "尺寸怎麼挑？"
+    a: "官方尺碼為 22.5cm（US 3.5）到 25.0cm（US 6.5），共5個尺碼，其中沒有 24.0cm 這個尺碼（官網尺碼表本身就跳過）。建議依平常穿的日系尺碼對照選購，猶豫時建議選大半號。"
+  - q: "預購多久會到貨？"
+    a: "訂單成立後我們會直接向 CONVERSE TOKYO 官方網站下單，實際到貨時間依日本出貨與國際配送時程而定，正確時間請以下單頁面說明為準。"
+  - q: "這是正品嗎？"
+    a: "是的，本商品由 BuzzBuzz 直接向 CONVERSE TOKYO 官方網站下單取得，非平行輸入或二手商品。"
+
+# --- Shopify 標籤（namespace:value 格式，給 AI agent 讀的） ---
+tags:
+  - "brand:converse-tokyo"
+  - "category:sneakers"
+  - "style:street"
+  - "style:limited-edition"
+  - "origin:japan"
+  - "gender:women"
+
+# --- 結構化資料（JSON-LD Schema） ---
+jsonld_product: '{"@context":"https://schema.org","@type":"Product","name":"CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋（女款）","brand":{"@type":"Brand","name":"CONVERSE TOKYO"},"sku":"A2854PSH900","material":"帆布（洗水加工）／橡膠鞋底","countryOfOrigin":"JP","offers":{"@type":"Offer","priceCurrency":"TWD","price":"5980","availability":"https://schema.org/PreOrder","itemCondition":"https://schema.org/NewCondition"}}'
+
+jsonld_faq: '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"台灣買得到這雙鞋嗎？","acceptedAnswer":{"@type":"Answer","text":"目前 CONVERSE TOKYO 沒有在台灣設官方或代理通路，這款是日本國內限定的10週年紀念鞋款，只能透過日本直送預購取得。"}},{"@type":"Question","name":"尺寸怎麼挑？","acceptedAnswer":{"@type":"Answer","text":"目前僅有 23.5cm（約 US 4.5）與 24cm 兩個尺寸，建議依平常穿的日系尺碼對照選購；帆布鞋楦偏窄，猶豫時建議選大半號。"}},{"@type":"Question","name":"預購多久會到貨？","acceptedAnswer":{"@type":"Answer","text":"訂單成立後我們會直接向 CONVERSE TOKYO 官方網站下單，實際到貨時間依日本出貨與國際配送時程而定，正確時間請以下單頁面說明為準。"}},{"@type":"Question","name":"這是正品嗎？","acceptedAnswer":{"@type":"Answer","text":"是的，本商品由 BuzzBuzz 直接向 CONVERSE TOKYO 官方網站下單取得，非平行輸入或二手商品。"}}]}'
+
+# --- 圖片清單 ---
+images:
+  - "images/photo-main.jpg"
+  - "images/photo-1.jpg"
+  - "images/photo-2.jpg"
+  - "images/photo-3.jpg"
+  - "images/photo-4.jpg"
+  - "images/photo-5.jpg"
+  - "images/photo-6.jpg"
+  - "images/photo-7.jpg"
+
+# ============================================
+# ▼ 發布記錄（由 scripts/push.py 自動寫入，勿手動編輯）
+# ============================================
+published:
+  shopify_id: ""
+  shopify_url: ""
+  shopify_status: ""
+  published_at: ""
