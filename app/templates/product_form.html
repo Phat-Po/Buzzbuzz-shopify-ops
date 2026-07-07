@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{% if product %}Edit {{ product.title }}{% else %}New Product{% endif %} — Launch OS{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="{% if product %}/products/{{ product.id }}{% else %}/{% endif %}" class="back-link">&larr; Back</a>
+    <h1>{% if product %}Edit Product{% else %}New Product{% endif %}</h1>
+  </div>
+</div>
+
+<form method="post" action="{% if product %}/products/{{ product.id }}/edit{% else %}/products/new{% endif %}" class="product-form">
+  <div class="form-grid">
+    <div class="form-group full-width">
+      <label for="title">Product Title *</label>
+      <input type="text" id="title" name="title" required value="{{ product.title if product else '' }}" placeholder="e.g. Bamboo Cutting Board Set">
+    </div>
+
+    <div class="form-group">
+      <label for="category">Category</label>
+      <input type="text" id="category" name="category" value="{{ product.category if product and product.category else '' }}" placeholder="e.g. Kitchen">
+    </div>
+
+    <div class="form-group">
+      <label for="target_market">Target Market</label>
+      <input type="text" id="target_market" name="target_market" value="{{ product.target_market if product and product.target_market else '' }}" placeholder="e.g. US, EU">
+    </div>
+
+    <div class="form-group">
+      <label for="supplier_name">Supplier Name</label>
+      <input type="text" id="supplier_name" name="supplier_name" value="{{ product.supplier_name if product and product.supplier_name else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="supplier_url">Supplier URL</label>
+      <input type="url" id="supplier_url" name="supplier_url" value="{{ product.supplier_url if product and product.supplier_url else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="cost_price">Cost Price</label>
+      <input type="number" id="cost_price" name="cost_price" step="0.01" min="0" value="{{ product.cost_price if product and product.cost_price else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="target_price">Target Price</label>
+      <input type="number" id="target_price" name="target_price" step="0.01" min="0" value="{{ product.target_price if product and product.target_price else '' }}">
+    </div>
+
+    <div class="form-group">
+      <label for="currency">Currency</label>
+      <select id="currency" name="currency">
+        <option value="USD" {% if not product or product.currency == 'USD' %}selected{% endif %}>USD</option>
+        <option value="EUR" {% if product and product.currency == 'EUR' %}selected{% endif %}>EUR</option>
+        <option value="GBP" {% if product and product.currency == 'GBP' %}selected{% endif %}>GBP</option>
+        <option value="TWD" {% if product and product.currency == 'TWD' %}selected{% endif %}>TWD</option>
+        <option value="CNY" {% if product and product.currency == 'CNY' %}selected{% endif %}>CNY</option>
+      </select>
+    </div>
+
+    <div class="form-group full-width">
+      <label for="notes">Notes</label>
+      <textarea id="notes" name="notes" rows="5" placeholder="Product details, features, materials, selling points...">{{ product.notes if product and product.notes else '' }}</textarea>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{% if product %}Save Changes{% else %}Create Product{% endif %}</button>
+    <a href="{% if product %}/products/{{ product.id }}{% else %}/{% endif %}" class="btn btn-secondary">Cancel</a>
+  </div>
+</form>
+{% endblock %}

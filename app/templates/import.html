@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Import Products — Launch OS{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <a href="/" class="back-link">&larr; Dashboard</a>
+    <h1>Import Products</h1>
+  </div>
+</div>
+
+<div class="detail-card">
+  <h3>Upload CSV or JSON</h3>
+  <p>Import product candidates from a file. Each row/object becomes a new product in IDEA status.</p>
+
+  <form method="post" action="/api/products/import" enctype="multipart/form-data" class="upload-form">
+    <input type="file" name="file" accept=".csv,.json" required>
+    <button type="submit" class="btn btn-primary">Import</button>
+  </form>
+
+  <h3 style="margin-top: 2rem;">CSV Format</h3>
+  <p>Required column: <code>title</code>. Optional columns:</p>
+  <table class="data-table">
+    <thead><tr><th>Column</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>title</td><td>Bamboo Cutting Board</td></tr>
+      <tr><td>category</td><td>Kitchen</td></tr>
+      <tr><td>target_market</td><td>US</td></tr>
+      <tr><td>supplier_name</td><td>Yiwu Bamboo Co</td></tr>
+      <tr><td>cost_price</td><td>4.50</td></tr>
+      <tr><td>target_price</td><td>24.99</td></tr>
+      <tr><td>currency</td><td>USD</td></tr>
+      <tr><td>notes</td><td>Organic bamboo, 3 sizes</td></tr>
+      <tr><td>variant_option</td><td>Size</td></tr>
+      <tr><td>variant_value</td><td>Large</td></tr>
+      <tr><td>variant_sku</td><td>BCB-LG</td></tr>
+      <tr><td>variant_price</td><td>29.99</td></tr>
+    </tbody>
+  </table>
+</div>
+{% endblock %}
