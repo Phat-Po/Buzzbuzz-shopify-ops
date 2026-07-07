@@ -33,3 +33,7 @@
 `top100.yaml` 不再被當作真理，只是候選來源之一（`sourcing.source: top100`）。
 不管品牌是從 top100 來的還是 discovery 自然發現的，都要走同一套驗證流程才能進
 `candidates.md`。
+
+top100.yaml 剩餘品牌的系統性驗證（不透過 discovery，直接拿品牌名去查 2-of-4 信號）
+是獨立的另一條流程，見 `tasks/top100-validation-sweep-plan.md`——刻意跟這裡的
+discovery 流程分開規劃，避免「發現層」和「驗證層」的搜尋詞和判斷邏輯混在一起。
