@@ -2,12 +2,13 @@ __pycache__/
 *.pyc
 *.pyo
 .env
-data/launch_os.db
-data/media/
 *.egg-info/
 dist/
 build/
 .venv/
 .pytest_cache/
 scripts/tmp/
-data/
+
+# 產品圖片不入 git（體積大）
+products/*/images/*
+!products/_template/images/.gitkeep

@@ -1,0 +1,953 @@
+# 2026 台日代購 Top 100 選品清單
+# 來源: Japan_Proxy_Top100.pdf
+# 匯率基準: 1 TWD ≈ 5.05 JPY
+
+# 優先操作 Top 20（★★★ 高勝率品項）
+priority_top20:
+  - no: 1
+    category: 包袋
+    brand: BAO BAO ISSEY MIYAKE
+    products: Lucent、Prism、Daypack、限定色
+    margin: 40-60%
+    priority: ★★★
+    risk: 低
+    notes: 核心主力。台灣百貨價高，輕便，辨識度最高
+
+  - no: 2
+    category: 包袋
+    brand: PLEATS PLEASE ISSEY MIYAKE
+    products: Tote、斜背小包、摺疊包
+    margin: 35-55%
+    priority: ★★★
+    risk: 低
+    notes: 女性客單高，與BAO BAO客群重疊
+
+  - no: 4
+    category: 包袋
+    brand: Yoshida Porter
+    products: Tanker、Force、Heat、Senses
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 男性商務客穩定，台灣有官方店利於比價
+
+  - no: 8
+    category: 包袋
+    brand: Hender Scheme
+    products: 皮革小包、錢包、卡夾
+    margin: 35-55%
+    priority: ★★★
+    risk: 低
+    notes: 高質感日系皮件，小皮件最適合代購
+
+  - no: 9
+    category: 包袋
+    brand: Aeta
+    products: Deer leather pouch、tote
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 極簡精品感，台灣選物店售價偏高
+
+  - no: 17
+    category: 包袋
+    brand: Hyke x Porter 聯名
+    products: 聯名包、軍裝風小包
+    margin: 50-70%
+    priority: ★★★
+    risk: 中
+    notes: 聯名款優先，現貨可溢價
+
+  - no: 21
+    category: 潮流服飾
+    brand: Human Made
+    products: T-shirt、帽、外套、小物
+    margin: 40-60%
+    priority: ★★★
+    risk: 低
+    notes: 日本限定與新品最有價差，流量強
+
+  - no: 22
+    category: 潮流服飾
+    brand: WTAPS
+    products: 軍裝襯衫、帽、Tee
+    margin: 45-60%
+    priority: ★★★
+    risk: 中
+    notes: 台灣選物店溢價高，需控真偽
+
+  - no: 23
+    category: 潮流服飾
+    brand: Neighborhood
+    products: Tee、香爐、家居小物
+    margin: 40-55%
+    priority: ★★★
+    risk: 低
+    notes: 香爐台灣熱銷且單價高
+
+  - no: 25
+    category: 潮流服飾
+    brand: Needles
+    products: Track pants、外套
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 尺寸需求穩定，黑紫色系好賣
+
+  - no: 26
+    category: 潮流服飾
+    brand: Beams Plus/Japan/別注
+    products: 外套、襯衫、鞋
+    margin: 35-60%
+    priority: ★★★
+    risk: 低
+    notes: 折扣季爆發力高
+
+  - no: 28
+    category: 潮流服飾
+    brand: Danton
+    products: 圓領羽絨背心、羊毛外套
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 台灣定價約日本1.8倍，知名度高
+
+  - no: 32
+    category: 潮流服飾
+    brand: Nanamica
+    products: Gore-Tex風衣、包
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 機能潮流穩定，日購省萬元以上
+
+  - no: 33
+    category: 潮流服飾
+    brand: TNF Purple Label
+    products: 包、外套、褲
+    margin: 40-60%
+    priority: ★★★
+    risk: 低
+    notes: 台灣稀缺，代購辨識度高
+
+  - no: 34
+    category: 潮流服飾
+    brand: Issey Miyake Homme Plisse
+    products: 皺褶長褲、外套
+    margin: 35-55%
+    priority: ★★★
+    risk: 低
+    notes: 台灣極難搶，日本購入機會多
+
+  - no: 38
+    category: 潮流服飾
+    brand: Snow Peak Apparel
+    products: 機能服飾系列
+    margin: 40-50%
+    priority: ★★★
+    risk: 低
+    notes: 台灣定價約日本5-6折
+
+  - no: 41
+    category: 戶外運動
+    brand: Mont-bell
+    products: 羽絨衣、雨衣、睡袋、小包
+    margin: 40-55%
+    priority: ★★★
+    risk: 低
+    notes: 日幣弱時極具競爭力
+
+  - no: 42
+    category: 戶外運動
+    brand: Snow Peak
+    products: 鈦杯、鈦餐具、服飾
+    margin: 35-50%
+    priority: ★★★
+    risk: 低
+    notes: 體積小的鈦金屬品最優
+
+  - no: 43
+    category: 戶外運動
+    brand: Yamatomichi 山と道
+    products: MINI背包、5-Pocket Pants
+    margin: 45-70%
+    priority: ★★★
+    risk: 低
+    notes: 稀缺高毛利，預購制最佳
+
+  - no: 51
+    category: 戶外運動
+    brand: Arai 安全帽
+    products: RX-7X、VZ-Ram
+    margin: 35-50%
+    priority: ★★★
+    risk: 中
+    notes: 一頂省5000-8000台幣，體積大建議預購
+
+# 全品項 Top 100（按品類分組）
+categories:
+  包袋:
+    items:
+      - no: 1
+        brand: BAO BAO ISSEY MIYAKE
+        products: Lucent、Prism、Daypack、限定色
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 核心主力
+      - no: 2
+        brand: PLEATS PLEASE ISSEY MIYAKE
+        products: Tote、斜背小包、摺疊包
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 女性客單高
+      - no: 3
+        brand: me ISSEY MIYAKE
+        products: 皺褶小包、輕量手提
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 單價低，適合補單湊重
+      - no: 4
+        brand: Yoshida Porter
+        products: Tanker、Force、Heat、Senses
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 男性商務客穩定
+      - no: 5
+        brand: POTR by Yoshida
+        products: Ride、Monogram、Scope
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 年輕化Porter
+      - no: 6
+        brand: Luggage Label
+        products: 旅行袋、斜背包
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 吉田系副線
+      - no: 7
+        brand: master-piece
+        products: 後背包、機能托特
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 台灣知名度高但款式不全
+      - no: 8
+        brand: Hender Scheme
+        products: 皮革小包、錢包、卡夾
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 高質感日系皮件
+      - no: 9
+        brand: Aeta
+        products: Deer leather pouch、tote
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 極簡精品感
+      - no: 10
+        brand: Beautiful People
+        products: Logo tote、皮件
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 女性潮流客接受度高
+      - no: 11
+        brand: CDG Wallet / CDG PLAY
+        products: 錢包、卡夾、帆布袋、小包
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 體積小、單價高、好寄送
+      - no: 12
+        brand: Kapital 包袋
+        products: 老人與海帆布袋、Bandana包
+        margin: 40-60%
+        priority: ★★
+        risk: 中
+        notes: 稀缺度高
+      - no: 13
+        brand: Visvim
+        products: Ballistic、皮件、小袋
+        margin: 35-55%
+        priority: ★★
+        risk: 中
+        notes: 高單價，適合預購制
+      - no: 14
+        brand: Sacai 包袋
+        products: Tote、collab小包
+        margin: 30-50%
+        priority: ★★
+        risk: 低
+        notes: 適合跟服飾一起搭售
+      - no: 15
+        brand: And Wander 包袋
+        products: X-Pac小包、機能肩背
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 戶外潮流雙市場
+      - no: 16
+        brand: F/CE.
+        products: 旅行後背、斜背包
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 機能時尚，台灣通路有限
+      - no: 17
+        brand: Hyke x Porter 聯名
+        products: 聯名包、軍裝風小包
+        margin: 50-70%
+        priority: ★★★
+        risk: 中
+        notes: 聯名款優先
+      - no: 18
+        brand: TOGA PULLA
+        products: 皮件、金屬扣小包
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 女性設計師品牌
+      - no: 19
+        brand: Genten / 土屋鞄
+        products: 皮革包、錢包
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 質感客群，適合禮品
+      - no: 20
+        brand: Agnes b. / Herve Chapelier
+        products: 尼龍水餃包、舟型包
+        margin: 40-55%
+        priority: ★★
+        risk: 低
+        notes: 台日價差約50%
+
+  潮流服飾:
+    items:
+      - no: 21
+        brand: Human Made
+        products: T-shirt、帽、外套、小物
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 日本限定與新品最有價差
+      - no: 22
+        brand: WTAPS
+        products: 軍裝襯衫、帽、Tee
+        margin: 45-60%
+        priority: ★★★
+        risk: 中
+        notes: 台灣選物店溢價高
+      - no: 23
+        brand: Neighborhood
+        products: Tee、香爐、家居小物
+        margin: 40-55%
+        priority: ★★★
+        risk: 低
+        notes: 香爐台灣熱銷
+      - no: 24
+        brand: Wacko Maria
+        products: 夏威夷襯衫、Tee
+        margin: 40-60%
+        priority: ★★
+        risk: 低
+        notes: 熱門圖案優先
+      - no: 25
+        brand: Needles
+        products: Track pants、外套
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 黑紫色系好賣
+      - no: 26
+        brand: Beams Plus/Japan/別注
+        products: 外套、襯衫、鞋
+        margin: 35-60%
+        priority: ★★★
+        risk: 低
+        notes: 折扣季爆發力高
+      - no: 27
+        brand: United Arrows
+        products: 別注外套、襯衫、鞋
+        margin: 30-55%
+        priority: ★★
+        risk: 低
+        notes: 精緻男裝客群穩定
+      - no: 28
+        brand: Danton
+        products: 圓領羽絨背心、羊毛外套
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 台灣定價約日本1.8倍
+      - no: 29
+        brand: Graphpaper
+        products: 襯衫、寬褲
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 高質感男裝
+      - no: 30
+        brand: Auralee
+        products: 針織、襯衫、外套
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 高單價需精準尺寸
+      - no: 31
+        brand: Comoli
+        products: 外套、襯衫、褲
+        margin: 35-55%
+        priority: ★★
+        risk: 中
+        notes: 日本市場也搶
+      - no: 32
+        brand: Nanamica
+        products: Gore-Tex風衣、包
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 機能潮流穩定
+      - no: 33
+        brand: TNF Purple Label
+        products: 包、外套、褲
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 台灣稀缺
+      - no: 34
+        brand: Issey Miyake Homme Plisse
+        products: 皺褶長褲、外套
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 台灣極難搶
+      - no: 35
+        brand: Kapital 服飾
+        products: 骨頭毛衣、藍染系列
+        margin: 40-60%
+        priority: ★★
+        risk: 中
+        notes: 稀缺性強
+      - no: 36
+        brand: Goldwin 服飾
+        products: Gore-Tex外套、褲
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 適合秋冬操作
+      - no: 37
+        brand: Maison Kitsune Japan限定
+        products: 限定款式/配色
+        margin: 30-50%
+        priority: ★★
+        risk: 低
+        notes: 日本限定與台灣差異明顯
+      - no: 38
+        brand: Snow Peak Apparel
+        products: 機能服飾系列
+        margin: 40-50%
+        priority: ★★★
+        risk: 低
+        notes: 台灣定價約日本5-6折
+      - no: 39
+        brand: GU 聯名款
+        products: Chiikawa、動漫、設計師聯名
+        margin: 30-60%
+        priority: ★★
+        risk: 低
+        notes: 低成本高周轉
+      - no: 40
+        brand: Uniqlo 限定/熱門尺碼
+        products: U系列、+J爆款
+        margin: 20-40%
+        priority: ★
+        risk: 低
+        notes: 只做爆款量大
+
+  戶外運動:
+    items:
+      - no: 41
+        brand: Mont-bell
+        products: 羽絨衣、雨衣、睡袋、小包
+        margin: 40-55%
+        priority: ★★★
+        risk: 低
+        notes: 日幣弱時極具競爭力
+      - no: 42
+        brand: Snow Peak
+        products: 鈦杯、鈦餐具、服飾
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 體積小的鈦金屬品最優
+      - no: 43
+        brand: Yamatomichi 山と道
+        products: MINI背包、5-Pocket Pants
+        margin: 45-70%
+        priority: ★★★
+        risk: 低
+        notes: 稀缺高毛利
+      - no: 44
+        brand: And Wander 戶外
+        products: 反光包、機能外套
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 戶外潮流雙市場
+      - no: 45
+        brand: Nanga
+        products: 羽絨外套、睡袋
+        margin: 35-55%
+        priority: ★★
+        risk: 低
+        notes: 日本製羽絨有賣點
+      - no: 46
+        brand: Finetrack
+        products: 排汗層、雨衣
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 專業登山客剛需
+      - no: 47
+        brand: Goldwin 戶外
+        products: Gore-Tex高端外套
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 高單價機能
+      - no: 48
+        brand: SOTO
+        products: 登山爐、打火機、鍋具
+        margin: 35-50%
+        priority: ★★
+        risk: 中
+        notes: 注意航空運送限制
+      - no: 49
+        brand: Evernew
+        products: 鈦鍋、鈦杯、酒精爐
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 輕量登山客剛需
+      - no: 50
+        brand: RawLow Mountain Works
+        products: 登山包、小包
+        margin: 35-55%
+        priority: ★★
+        risk: 低
+        notes: 台灣小眾戶外圈
+      - no: 51
+        brand: Arai 安全帽
+        products: RX-7X、VZ-Ram
+        margin: 35-50%
+        priority: ★★★
+        risk: 中
+        notes: 體積大建議預購
+      - no: 52
+        brand: Shoei 安全帽
+        products: Z-8、EX-Zero、X-Fifteen
+        margin: 35-50%
+        priority: ★★★
+        risk: 中
+        notes: 需說明尺寸與保固
+      - no: 53
+        brand: OGK Kabuto
+        products: Aeroblade 6 輕量帽
+        margin: 35-45%
+        priority: ★★
+        risk: 中
+        notes: 價差高達40%
+      - no: 54
+        brand: Shimano 釣具
+        products: Stella捲線器、高階配件
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 小體積高客單
+      - no: 55
+        brand: Daiwa 釣具
+        products: Exist捲線器、路亞用品
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 與Shimano並列主力
+      - no: 56
+        brand: Honma Golf
+        products: Beres球桿組
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 高單價指定代購
+      - no: 57
+        brand: Majesty Golf
+        products: 一號木桿、球袋配件
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 銀髮高端客群
+      - no: 58
+        brand: Yonex 羽球拍
+        products: 高階產地限定版
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 日本限定款
+      - no: 59
+        brand: Kushitani
+        products: 騎士外套、手套
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 台灣重機族高客單
+      - no: 60
+        brand: Descente
+        products: 日本版滑雪服/保暖衣
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 冬季優先
+
+  收藏玩具:
+    items:
+      - no: 61
+        brand: KATO 鐵道模型
+        products: N規新幹線、限定列車
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 台灣鐵道迷願付溢價
+      - no: 62
+        brand: TOMIX 鐵道模型
+        products: 新幹線、特急車組
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 與KATO並行
+      - no: 63
+        brand: Micro Ace
+        products: 特殊車種、地方私鐵
+        margin: 45-65%
+        priority: ★★
+        risk: 低
+        notes: 小眾但高毛利
+      - no: 64
+        brand: Medicom Be@rbrick
+        products: 400%/1000%限定聯名
+        margin: 40-70%
+        priority: ★★★
+        risk: 中
+        notes: 限定與聯名款優先
+      - no: 65
+        brand: Tamashii Nations 限定
+        products: SHF公仔、魂商店限定
+        margin: 35-65%
+        priority: ★★★
+        risk: 低
+        notes: 小體積熱門IP
+      - no: 66
+        brand: Good Smile / Nendoroid
+        products: 黏土人、限定版
+        margin: 30-50%
+        priority: ★★
+        risk: 低
+        notes: 小體積出貨穩
+      - no: 67
+        brand: P-Bandai 限定鋼彈
+        products: 彩透、鍍鉻特殊版
+        margin: 40-65%
+        priority: ★★★
+        risk: 低
+        notes: 台灣抽不到或預購秒殺
+      - no: 68
+        brand: 一番賞整組
+        products: 熱門IP最後賞
+        margin: 40-70%
+        priority: ★★
+        risk: 中
+        notes: 需控體積與箱況
+      - no: 69
+        brand: Gashapon 轉蛋整套
+        products: Chiikawa、Sanrio、寶可夢
+        margin: 40-70%
+        priority: ★★★
+        risk: 低
+        notes: 低成本高周轉
+      - no: 70
+        brand: Pokemon Center Japan 限定
+        products: 限定娃娃、卡冊、周邊
+        margin: 40-70%
+        priority: ★★★
+        risk: 低
+        notes: 日本限定最強
+      - no: 71
+        brand: Chiikawa 限定
+        products: 娃娃、吊飾、餐具
+        margin: 40-80%
+        priority: ★★★
+        risk: 中
+        notes: 爆款但波動大
+      - no: 72
+        brand: Sanrio Japan限定
+        products: 庫洛米、Hello Kitty節慶款
+        margin: 35-60%
+        priority: ★★★
+        risk: 低
+        notes: 女性客群與送禮需求
+      - no: 73
+        brand: Studio Ghibli Donguri
+        products: 龍貓、魔女宅急便周邊
+        margin: 35-60%
+        priority: ★★
+        risk: 低
+        notes: 禮品需求強
+      - no: 74
+        brand: Nintendo Store限定
+        products: 薩爾達/瑪利歐周邊
+        margin: 35-60%
+        priority: ★★
+        risk: 低
+        notes: 非主機類最好操作
+      - no: 75
+        brand: Tamiya 田宮高階
+        products: 遙控車組、工具套組
+        margin: 35-55%
+        priority: ★★
+        risk: 低
+        notes: 玩家客群精準
+
+  咖啡器具:
+    items:
+      - no: 76
+        brand: Hario
+        products: 銅壺、V60限定色、濾杯
+        margin: 35-50%
+        priority: ★★★
+        risk: 低
+        notes: 日本製與限定色優先
+      - no: 77
+        brand: Kalita
+        products: Wave、Next G2磨豆機、銅壺
+        margin: 35-55%
+        priority: ★★★
+        risk: 低
+        notes: 磨豆機台灣定價極高
+      - no: 78
+        brand: Origami Dripper
+        products: 限定色濾杯、杯盤組
+        margin: 30-45%
+        priority: ★★★
+        risk: 低
+        notes: 台灣咖啡圈需求穩定
+      - no: 79
+        brand: Kono 名門
+        products: 限定濾杯、手沖壺
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 小眾精品咖啡客
+      - no: 80
+        brand: Blue Bottle Japan限定
+        products: 限定杯、濾杯、帆布袋
+        margin: 40-70%
+        priority: ★★★
+        risk: 低
+        notes: 台灣無官方店
+      - no: 81
+        brand: Kurasu Kyoto
+        products: 杯具、咖啡器材
+        margin: 35-55%
+        priority: ★★
+        risk: 低
+        notes: 咖啡迷辨識度高
+      - no: 82
+        brand: Glitch Coffee 周邊
+        products: 杯、衣服小物
+        margin: 35-60%
+        priority: ★★
+        risk: 低
+        notes: 周邊比豆子穩
+
+  廚房生活:
+    items:
+      - no: 83
+        brand: Vermicular
+        products: 鑄鐵鍋、琺瑯平底鍋、Mini限定
+        margin: 40-60%
+        priority: ★★★
+        risk: 中
+        notes: 台日價差50%+，重量大建議集運
+      - no: 84
+        brand: 柳宗理 Sori Yanagi
+        products: 不鏽鋼鍋、濾水籃、平底鍋
+        margin: 40-60%
+        priority: ★★★
+        risk: 低
+        notes: 台灣百貨價高
+      - no: 85
+        brand: Global / Misono 廚刀
+        products: 主廚刀、刀具組
+        margin: 35-55%
+        priority: ★★
+        risk: 中
+        notes: 運送需注意包裝
+      - no: 86
+        brand: Staub Japan限定色
+        products: 小鍋、飯鍋
+        margin: 30-50%
+        priority: ★★
+        risk: 中
+        notes: 限定色才值得
+      - no: 87
+        brand: Zojirushi 日本限定
+        products: 保溫杯、燜燒罐
+        margin: 25-45%
+        priority: ★★
+        risk: 低
+        notes: 輕便剛需
+      - no: 88
+        brand: Bruno 電烤盤限定色
+        products: 限定色及配件
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 送禮需求強
+      - no: 89
+        brand: Nousaku 錫製酒杯
+        products: 手工職人酒杯
+        margin: 35-55%
+        priority: ★★
+        risk: 低
+        notes: 送禮精品感
+      - no: 90
+        brand: Balmuda Japan限定
+        products: 限定款家電、燈具
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 日本限定款式
+
+  腕錶配件:
+    items:
+      - no: 91
+        brand: Grand Seiko
+        products: 日本限定、過季款
+        margin: 25-45%
+        priority: ★★
+        risk: 高
+        notes: 高單價需逐款比價
+      - no: 92
+        brand: Seiko Prospex/Presage JDM
+        products: 日本內銷款
+        margin: 30-50%
+        priority: ★★★
+        risk: 低
+        notes: 比Grand Seiko好周轉
+      - no: 93
+        brand: Casio G-Shock Japan限定
+        products: MR-G、Full Metal、限定色
+        margin: 30-50%
+        priority: ★★★
+        risk: 低
+        notes: 年輕男性需求穩定
+      - no: 94
+        brand: Citizen Attesa
+        products: 光動能高階款、日本內銷
+        margin: 30-45%
+        priority: ★★
+        risk: 低
+        notes: 日本內銷款有賣點
+      - no: 95
+        brand: Knot Watch
+        products: 錶帶、錶頭客製
+        margin: 35-50%
+        priority: ★★
+        risk: 低
+        notes: 小而輕可多件組合
+
+  生活美妝:
+    items:
+      - no: 96
+        brand: Shiro Japan
+        products: 香水、擴香、護手霜
+        margin: 30-50%
+        priority: ★★★
+        risk: 低
+        notes: 日本香氛品牌需求上升
+      - no: 97
+        brand: uka
+        products: 指緣油、髮品、刷具
+        margin: 30-50%
+        priority: ★★
+        risk: 低
+        notes: 小體積女性客群
+      - no: 98
+        brand: SUQQU / Cle de Peau
+        products: 節慶限定彩妝盤、精華組
+        margin: 30-50%
+        priority: ★★
+        risk: 低
+        notes: 液體注意運送
+
+  文具選品:
+    items:
+      - no: 99
+        brand: Traveler's Company
+        products: 限定TN、護照本、貼紙
+        margin: 40-70%
+        priority: ★★★
+        risk: 低
+        notes: 台灣文具圈強需求
+      - no: 100
+        brand: Hobonichi / Midori / Kakimori
+        products: 手帳、限定墨水、鋼筆
+        margin: 35-60%
+        priority: ★★★
+        risk: 低
+        notes: 9-12月旺季
+
+# 定價策略
+pricing_strategy:
+  穩定周轉款:
+    margin: 20-30%
+    examples: Mont-bell、Snow Peak鈦杯、柳宗理、Zojirushi、Origami、Hario
+    approach: 主打周轉速度，不追高毛利，折扣季批量進
+  稀缺高毛利款:
+    margin: 35-60%
+    examples: BAO BAO限定色、Yamatomichi、Human Made、WTAPS、TNF Purple Label、Pokemon Center限定
+    approach: 主攻限定與日本獨家，預購制為主，嚴控庫存
+  高單價指定代購:
+    margin: 固定服務費
+    examples: Grand Seiko、Arai、Shoei、Vermicular、Honma Golf
+    approach: 訂金+實報實銷+固定服務費，不建議囤貨
+
+# 禁止 / 高風險品項
+prohibited:
+  - 肉製品（肉鬆、肉乾、肉塊）— 罰金 NT$200,000 起
+  - 電子菸、未核准加熱菸 — 台灣海關嚴查
+  - 藥品、過量保健食品 — 需事前確認品項與數量上限
+
+high_risk:
+  - 液體香水大量進口 — 需申報
+  - 刀具大量寄送 — 需特殊包裝
+  - 高單價腕錶 — 需逐款確認保固
+
+# 起步策略
+startup_strategy:
+  first_wave:
+    - BAO BAO
+    - Porter
+    - Mont-bell
+    - Snow Peak
+    - 鐵道模型
+    - 咖啡器具
+  sku_per_line: 5-8
+  test_period: 30天
+  metric: 詢問量與成交率
