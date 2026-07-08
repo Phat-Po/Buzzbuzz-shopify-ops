@@ -4,31 +4,48 @@
 
 ---
 
-## 2026-07-08 | 選品雷達上線 + 第一個產品成功推送 Shopify（DRAFT）
+## 2026-07-08 | push.py 補完圖片/變體/分類/collection，供應鏈保密規則收斂
 
 **Done this session:**
-- 建立「台灣選品雷達輕量版」（`sourcing/radar/`）：discovery（場景詞搜尋，不預設品牌）+ validation（Google Trends TW / 社群討論量 / 第三方交叉比對 / 蝦皮市場證據，2-of-4 收斂）兩層架構，取代單純依賴 `top100.yaml`
-- 跑完第一輪 discovery 全循環（dcard/ptt/mobile01 × 17場景詞），驗證 8 個候選品牌，結果見 `sourcing/radar/candidates.md`：**Converse Tokyo 日本限定**是唯一無條件強候選（台灣無官方通路）；BEAMS/LOGOS/Twinbird/Chiikawa 都命中訊號但台灣已有官方代理/直營，只能做「代理沒引進的限定款」
-- 寫了 `tasks/top100-validation-sweep-plan.md`（top100.yaml 剩餘 97 品牌的驗證專用掃描計劃，跟 discovery 分開）
-- 第一次打通完整上稿流程：建立 `products/converse-tokyo-allstar-10th-navy/`（型號 A2854PSH900，官網真實查證資料）→ AI 生成繁中文案 → `check.py` 質檢 17/17 → `push.py` 成功推送 Shopify（DRAFT，Product ID `8148497727597`）
-- 打通 Shopify Admin API 授權：2026年起 custom app 不再直接顯示 `shpat_` token，改用 Client ID/Secret；付費正式商店不能用 client_credentials grant，改走 authorization code grant（用 `cloudflared` 臨時通道處理跨地點授權），寫成可重用工具 `scripts/oauth_setup.py`
-- 修了 `push.py` 兩個真實 bug：缺 `pydantic-settings` 依賴、GraphQL mutation 宣告未使用的 `$metafields` 變數
-- 加了「供應鏈保密」自動掃描（`check.py` 第17項檢查）：擋下「向官網下單」「官網缺貨」「台灣沒有代理」這類會洩露商業模式的文案用語，規則同步寫進 `AGENTS.md` 和 `products/_template/product.yaml`
+- `push.py` 改用 `productSet` mutation（Shopify 目前建議的單一 mutation，取代已棄用的
+  `productCreate` + `productCreateMedia` + `productVariantsBulkCreate` 三段式流程）：
+  一次送出 title/description/選項(variants)/價格/圖片，圖片走 `stagedUploadsCreate`
+  兩段式上傳（先拿暫存網址，把本地檔案傳上去，再交給 productSet）
+- 新增支援對已發布產品重跑 `push.py`＝更新（`productSet` 的 `identifier` 比對既有
+  Shopify ID），不再是舊版「已發布過就跳過」
+- 補上 `shopify_taxonomy_id`（Shopify 官方標準分類）與 `shopify_default_collection_id`
+  （所有產品自動歸進「Popo選物」collection，用 ID 不是名稱，改名不影響）
+- 修了一個真實的供應鏈保密違規：`description_fact` 曾寫出日本原廠定價（¥19,800），
+  已改掉並補進 `check.py` 的自動掃描規則（擋 ¥xxx/日幣xxx/JPY xxx）
+- Tags 從「brand:/category:/style:/origin:/gender: 六個標籤」簡化成固定一個
+  `curated:popo-select`——查證 Shopify 官方文件後確認細分標籤沒有被列為 Agentic
+  Storefronts 會同步給 AI 助手的欄位，簡化掉沒有實際效益的複雜度
+- 在 Shopify 建了 5 個 metafield definition 並 pin（brand_en/material/price_gap_note/
+  season/gender），後台商品頁現在看得到這些值（之前有寫入但沒 definition，UI 顯示
+  「No metafields pinned」）
+- CONVERSE TOKYO 這個產品已經用新版 push.py 重推過，Shopify 上現在有 8 張圖、正確
+  選項/變體/價格、官方分類、collection
 
 **Current state:**
-`.env` 已有永久有效的 Shopify 憑證，可直接用。第一個產品是 Shopify 上的真實 DRAFT，但**只有標題/描述/tags/metafields，沒有圖片、沒有變體/價格**——`push.py` 目前完全沒處理 `images`/`variants`/`alt_text` 這三個欄位，是下一步要補的缺口。`sourcing/radar/` 的驗證方法論已經穩定，可以繼續往下跑（top100 剩餘品牌 或 discovery 下一輪）。
+`push.py`/`check.py`/`_template/product.yaml` 的改動都完成且驗證過（對 CONVERSE TOKYO
+實際 push 到 Shopify 確認）。CONVERSE TOKYO 產品目前 tags 還是舊格式（6 個），本輪只
+改了 template 和 push.py 邏輯，還沒重新 push 讓新 tag scheme 生效（操作者要求先不要
+再 push，之後自己決定時機）。
 
 **Next steps:**
-1. 補 `push.py` 的圖片上傳（`stagedUploadsCreate` + media mutation）與變體/價格（`productVariantsBulkCreate` 之類），完整交接文件見 `tasks/handoff-image-variant-upload.md`
-2. 之後可選：跑 `tasks/top100-validation-sweep-plan.md` 的品牌驗證掃描，或對已有候選（LOGOS/Twinbird/Chiikawa）補 D-2 毛價差試算
+1. 找操作者確認時機後，重推 CONVERSE TOKYO 讓新 tag（`curated:popo-select`）生效
+2. 繼續往下跑選品（`sourcing/radar/` 或 `top100-validation-sweep-plan.md`）
 
 **Decisions / notes:**
-- 選品驗證不再只信 `top100.yaml`——2-of-4 訊號收斂 + 「有代理不代表沒機會，要查毛價差」是現在的方法論
-- 產品文案有明確的供應鏈保密紅線，`check.py` 已自動守門
-- Shopify custom app 授權流程 2026 年整個改版，細節記在 `scripts/oauth_setup.py` 註解裡，之後不用重查
+- Tags 對傳統 Google SEO 沒有直接幫助；對 AI agent 的幫助也沒有 Shopify 官方保證
+  （官方列出的同步欄位是 title/description/options/images/price/availability，不含
+  tags）——固定一個 curation tag 就夠，不用堆疊細分標籤
+- `cost_jpy` 允許寫進 Shopify metafields（操作者定價需要），但只放 admin-only
+  metafield，絕對不能出現在任何公開文案欄位
 
 ## ■ Milestones
 
+- 2026-07-08 選品雷達上線（`sourcing/radar/` discovery+validation 兩層方法論）+ 打通 Shopify OAuth（`scripts/oauth_setup.py`）+ 第一個產品（CONVERSE TOKYO）成功推送 Shopify DRAFT | ✅ done
 - 2026-07-07 項目重新定位：從 ERP 改為本地 CLI 上稿工具，建立 products/YAML 模板、三個 CLI 腳本、Top100 選品清單 | ✅ done
 
 ## ▼ Archive

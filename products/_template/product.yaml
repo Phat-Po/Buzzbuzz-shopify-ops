@@ -13,7 +13,11 @@ brand_jp: ""               # 品牌日文名（例: イッセイミヤケ）
 brand_en: ""               # 品牌英文名（例: ISSEY MIYAKE）
 product_name: ""           # 商品名稱（繁中，例: BAO BAO Lucent 三角托特包）
 product_type: ""           # 商品類型：包袋 / 潮流服飾 / 戶外運動 / 收藏玩具 / 咖啡器具 / 廚房生活 / 腕錶配件 / 生活美妝 / 文具選品
-shopify_category: ""       # Shopify 產品類別（例: 服裝與配件 > 手提包）
+shopify_category: ""       # Shopify 產品類別（人看的，例: 服裝與配件 > 手提包）
+shopify_taxonomy_id: ""    # Shopify 官方標準分類 ID（push.py 實際會用這個，不是上面那欄）
+                           # 查法：用 Admin GraphQL 查 `taxonomy { categories(search: "英文關鍵字") { edges { node { id fullName } } } }`
+                           # 找到最接近的 fullName，把 id（格式 gid://shopify/TaxonomyCategory/xxx）填進來
+                           # 例: 運動鞋 → search "Sneakers" → gid://shopify/TaxonomyCategory/aa-8-8
 
 # === 價格 ===
 cost_jpy: 0                # 日本進價（日元）
@@ -63,7 +67,9 @@ seo_title: ""              # SEO 標題（≤60 字，含關鍵詞，給 google.
 seo_meta: ""               # SEO meta description（≤160 字，含價差/日本直送等銷售點）
 
 # --- 商品描述（三段式 Fact-Feel-Trust） ---
-description_fact: ""       # Fact 段（60-100 字）：材質、尺寸、重量、日本售價、台灣參考價、產地
+description_fact: ""       # Fact 段（60-100 字）：材質、尺寸、重量、產地、型號等客觀規格
+                           # ⚠️ 不要寫日本原廠定價（¥xxx/日幣xxx）——會洩露進貨成本，check.py 會擋
+                           # 尺寸/顏色等變體資訊已經在 variants 欄位，這裡不用重複寫「目前為XX色XX尺寸」
 description_feel: ""       # Feel 段（100-200 字）：穿搭建議、使用場景、適合風格、誰會喜歡
 description_trust: ""      # Trust 段（50-100 字）：正品保證、日本直送、退換貨政策、購買須知
 
@@ -75,12 +81,9 @@ alt_texts: {}              # { "檔名.jpg": "繁中描述", ... }
 faq: []                    # - q: "這個包包台灣專櫃賣多少？"
                            #   a: "台灣 ISSEY MIYAKE 專櫃售價約 NT$XX,XXX，本店日本直送只要 NT$XX,XXX。"
 
-# --- Shopify 標籤（namespace:value 格式，給 AI agent 讀的） ---
-tags: []                   # - brand:baobao-isseymiyake
-                           # - category:bag
-                           # - style:minimal
-                           # - origin:japan
-                           # - gender:women
+# --- Shopify 標籤 ---
+tags: [curated:popo-select]  # 固定值，每個產品都一樣，不用自己編。標記「這是 Popo 精選」，
+                             # 不要加 brand:/category:/style: 這些（已停用，check.py 只認這一個）
 
 # --- 結構化資料（JSON-LD Schema） ---
 jsonld_product: ""         # Product + Offer + Brand schema（JSON 字串）

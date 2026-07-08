@@ -4,15 +4,22 @@
 用法:
   python scripts/push.py products/<product-dir>
 
-讀取 product.yaml → 透過 Shopify Admin GraphQL API 建立/更新產品
-→ 所有產品預設建立為 DRAFT → 寫回 published 記錄到 product.yaml
+讀取 product.yaml → 上傳圖片 → 透過 Shopify Admin GraphQL API 建立/更新產品
+（含圖片/alt text/變體/價格）→ 所有產品預設為 DRAFT → 寫回 published 記錄到 product.yaml
+
+技術說明：使用 productSet mutation（Shopify 官方目前建議的單一 mutation，
+一次處理 title/description/選項/變體/圖片，取代已棄用的 productCreate +
+productCreateMedia + productVariantsBulkCreate 三段式流程）。圖片上傳仍需先走
+stagedUploadsCreate 兩段式流程（先拿上傳網址，把本地檔案傳上去，再把
+resourceUrl 交給 productSet）。
 """
 
 from __future__ import annotations
 
 import sys
 import json
-import shutil
+import mimetypes
+import itertools
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -25,6 +32,9 @@ class Settings(BaseSettings):
     shopify_store: str = ""
     shopify_admin_token: str = ""
     shopify_api_version: str = "2026-04"
+    # 所有產品上架都要放進「Popo選物」這個 collection。用 ID 而不是名稱，
+    # 這樣就算未來在 Shopify 後台把 collection 改名，這裡也不用跟著改。
+    shopify_default_collection_id: str = "gid://shopify/Collection/318686199917"
 
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
@@ -43,8 +53,19 @@ def save_product(product_dir: Path, data: dict) -> None:
     yaml_path.write_text(yaml.dump(data, allow_unicode=True, default_flow_style=False), encoding="utf-8")
 
 
-def build_product_input(data: dict) -> dict:
-    """從 product.yaml 建立 Shopify GraphQL productInput"""
+def graphql_url(settings: Settings) -> str:
+    return f"https://{settings.shopify_store}/admin/api/{settings.shopify_api_version}/graphql.json"
+
+
+def graphql_headers(settings: Settings) -> dict:
+    return {
+        "X-Shopify-Access-Token": settings.shopify_admin_token,
+        "Content-Type": "application/json",
+    }
+
+
+def build_base_fields(data: dict, settings: Settings) -> dict:
+    """從 product.yaml 建立 productSet 的基本欄位（title/description/tags/seo/category/collection...）"""
     title = data.get("title_zh") or data.get("product_name") or "未命名商品"
     desc_parts = []
     if data.get("description_fact"):
@@ -59,21 +80,18 @@ def build_product_input(data: dict) -> dict:
     vendor = data.get("brand_en") or data.get("brand_jp") or ""
 
     tags = data.get("tags", [])
-    if isinstance(tags, list):
-        tags_str = ", ".join(tags)
-    else:
-        tags_str = str(tags)
+    if isinstance(tags, str):
+        tags = [t.strip() for t in tags.split(",") if t.strip()]
 
     input_data = {
         "title": title,
         "descriptionHtml": description_html,
         "productType": product_type,
         "vendor": vendor,
-        "tags": tags_str,
+        "tags": tags,
         "status": "DRAFT",
     }
 
-    # SEO fields
     seo = {}
     if data.get("seo_title"):
         seo["title"] = data["seo_title"]
@@ -81,6 +99,14 @@ def build_product_input(data: dict) -> dict:
         seo["description"] = data["seo_meta"]
     if seo:
         input_data["seo"] = seo
+
+    # Shopify 官方標準分類（用 taxonomy ID，不是 shopify_category 那個純文字欄位）
+    if data.get("shopify_taxonomy_id"):
+        input_data["category"] = data["shopify_taxonomy_id"]
+
+    # 所有產品都要放進預設 collection（Popo選物）
+    if settings.shopify_default_collection_id:
+        input_data["collections"] = [settings.shopify_default_collection_id]
 
     return input_data
 
@@ -128,16 +154,156 @@ def build_metafields_input(product_gid: str, data: dict) -> list[dict]:
     return metafields
 
 
-def create_product(client: httpx.Client, settings: Settings, input_data: dict) -> dict:
-    """呼叫 Shopify GraphQL API 建立產品"""
+def create_staged_upload(client: httpx.Client, settings: Settings, filename: str, mime_type: str) -> dict:
+    """呼叫 stagedUploadsCreate，拿到暫存上傳目標（url + resourceUrl + parameters）"""
     mutation = """
-    mutation createProduct($input: ProductInput!) {
-      productCreate(input: $input) {
+    mutation stagedUploadsCreate($input: [StagedUploadInput!]!) {
+      stagedUploadsCreate(input: $input) {
+        stagedTargets {
+          url
+          resourceUrl
+          parameters {
+            name
+            value
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+    """
+    variables = {
+        "input": [{
+            "resource": "IMAGE",
+            "filename": filename,
+            "mimeType": mime_type,
+            "httpMethod": "POST",
+        }]
+    }
+
+    resp = client.post(graphql_url(settings), json={"query": mutation, "variables": variables}, headers=graphql_headers(settings))
+    resp.raise_for_status()
+    body = resp.json()
+
+    if "errors" in body:
+        sys.exit(f"❌ stagedUploadsCreate GraphQL 錯誤: {json.dumps(body['errors'], indent=2, ensure_ascii=False)}")
+
+    result = body["data"]["stagedUploadsCreate"]
+    if result["userErrors"]:
+        for err in result["userErrors"]:
+            print(f"  ⚠️  {err['field']}: {err['message']}")
+        sys.exit("❌ 圖片暫存上傳目標建立失敗")
+
+    return result["stagedTargets"][0]
+
+
+def upload_file_to_staged_target(client: httpx.Client, target: dict, file_path: Path, mime_type: str) -> None:
+    """把本地圖片檔案 POST 到 stagedUploadsCreate 給的暫存網址"""
+    fields = {p["name"]: p["value"] for p in target["parameters"]}
+    file_bytes = file_path.read_bytes()
+
+    resp = client.post(
+        target["url"],
+        data=fields,
+        files={"file": (file_path.name, file_bytes, mime_type)},
+    )
+    if resp.status_code >= 300:
+        sys.exit(f"❌ 圖片上傳失敗 ({file_path.name}): HTTP {resp.status_code}\n{resp.text[:500]}")
+
+
+def stage_and_upload_images(client: httpx.Client, settings: Settings, product_dir: Path, data: dict) -> list[dict]:
+    """把 product.yaml 裡 images 清單的所有圖片上傳到 Shopify，回傳 productSet 用的 files input"""
+    images = data.get("images", [])
+    alt_texts = data.get("alt_texts", {}) or {}
+
+    files_input = []
+    for rel_path in images:
+        img_path = product_dir / rel_path
+        if not img_path.exists():
+            print(f"  ⚠️  找不到圖片，跳過: {img_path}")
+            continue
+
+        mime_type = mimetypes.guess_type(img_path.name)[0] or "application/octet-stream"
+        target = create_staged_upload(client, settings, img_path.name, mime_type)
+        upload_file_to_staged_target(client, target, img_path, mime_type)
+
+        files_input.append({
+            "originalSource": target["resourceUrl"],
+            "alt": alt_texts.get(rel_path, ""),
+            "filename": img_path.name,
+            "contentType": "IMAGE",
+        })
+        print(f"  🖼️  已上傳: {rel_path}")
+
+    return files_input
+
+
+def build_options_and_variants(data: dict) -> tuple[list[dict], list[dict]]:
+    """把 product.yaml 的 variants（顏色/尺寸選項）轉成 productSet 的 productOptions + variants"""
+    variants_spec = data.get("variants", []) or []
+    valid_options = [v for v in variants_spec if v.get("option") and v.get("values")]
+
+    price = data.get("price_twd") or 0
+    compare_at = data.get("price_tw_ref") or 0
+    compare_at_price = str(compare_at) if compare_at and compare_at > price else None
+
+    if not valid_options:
+        # 沒填變體：建立單一預設變體，仍要帶上價格
+        options_input = [{"name": "Title", "position": 1, "values": [{"name": "Default Title"}]}]
+        variant = {
+            "price": str(price),
+            "optionValues": [{"optionName": "Title", "name": "Default Title"}],
+        }
+        if compare_at_price:
+            variant["compareAtPrice"] = compare_at_price
+        return options_input, [variant]
+
+    options_input = [
+        {
+            "name": opt["option"],
+            "position": i,
+            "values": [{"name": v} for v in opt["values"]],
+        }
+        for i, opt in enumerate(valid_options, start=1)
+    ]
+
+    option_names = [opt["option"] for opt in valid_options]
+    value_lists = [opt["values"] for opt in valid_options]
+
+    variants_input = []
+    for combo in itertools.product(*value_lists):
+        variant = {
+            "price": str(price),
+            "optionValues": [
+                {"optionName": option_names[i], "name": combo[i]}
+                for i in range(len(combo))
+            ],
+        }
+        if compare_at_price:
+            variant["compareAtPrice"] = compare_at_price
+        variants_input.append(variant)
+
+    return options_input, variants_input
+
+
+def product_set(client: httpx.Client, settings: Settings, input_data: dict, existing_id: str | None) -> dict:
+    """呼叫 productSet 建立/更新產品（含選項、變體、圖片）"""
+    mutation = """
+    mutation productSet($input: ProductSetInput!, $synchronous: Boolean!, $identifier: ProductSetIdentifiers) {
+      productSet(input: $input, synchronous: $synchronous, identifier: $identifier) {
         product {
           id
           handle
           onlineStorePreviewUrl
           status
+          variants(first: 50) {
+            nodes {
+              id
+              price
+            }
+          }
         }
         userErrors {
           field
@@ -149,26 +315,22 @@ def create_product(client: httpx.Client, settings: Settings, input_data: dict) -
 
     variables = {
         "input": input_data,
+        "synchronous": True,
+        "identifier": {"id": existing_id} if existing_id else None,
     }
 
-    url = f"https://{settings.shopify_store}/admin/api/{settings.shopify_api_version}/graphql.json"
-    headers = {
-        "X-Shopify-Access-Token": settings.shopify_admin_token,
-        "Content-Type": "application/json",
-    }
-
-    resp = client.post(url, json={"query": mutation, "variables": variables}, headers=headers)
+    resp = client.post(graphql_url(settings), json={"query": mutation, "variables": variables}, headers=graphql_headers(settings))
     resp.raise_for_status()
     body = resp.json()
 
     if "errors" in body:
-        sys.exit(f"❌ GraphQL 錯誤: {json.dumps(body['errors'], indent=2, ensure_ascii=False)}")
+        sys.exit(f"❌ productSet GraphQL 錯誤: {json.dumps(body['errors'], indent=2, ensure_ascii=False)}")
 
-    result = body["data"]["productCreate"]
+    result = body["data"]["productSet"]
     if result["userErrors"]:
         for err in result["userErrors"]:
             print(f"  ⚠️  {err['field']}: {err['message']}")
-        sys.exit("❌ 產品建立失敗")
+        sys.exit("❌ 產品建立/更新失敗")
 
     return result["product"]
 
@@ -178,7 +340,6 @@ def set_metafields(client: httpx.Client, settings: Settings, product_gid: str, m
     if not metafields:
         return
 
-    # Set ownerId on all metafields
     for mf in metafields:
         mf["ownerId"] = product_gid
 
@@ -198,13 +359,7 @@ def set_metafields(client: httpx.Client, settings: Settings, product_gid: str, m
     }
     """
 
-    url = f"https://{settings.shopify_store}/admin/api/{settings.shopify_api_version}/graphql.json"
-    headers = {
-        "X-Shopify-Access-Token": settings.shopify_admin_token,
-        "Content-Type": "application/json",
-    }
-
-    resp = client.post(url, json={"query": mutation, "variables": {"metafields": metafields}}, headers=headers)
+    resp = client.post(graphql_url(settings), json={"query": mutation, "variables": {"metafields": metafields}}, headers=graphql_headers(settings))
     resp.raise_for_status()
     body = resp.json()
 
@@ -221,7 +376,7 @@ def set_metafields(client: httpx.Client, settings: Settings, product_gid: str, m
 
 
 def push_product(product_dir: Path) -> None:
-    """主流程：讀取 → 推送到 Shopify → 寫回記錄"""
+    """主流程：讀取 → 上傳圖片 → 推送產品(含選項/變體) → 寫入 metafields → 寫回記錄"""
     settings = Settings()
 
     if not settings.shopify_store or not settings.shopify_admin_token:
@@ -230,35 +385,44 @@ def push_product(product_dir: Path) -> None:
     data = load_product(product_dir)
     product_name = data.get("product_name") or product_dir.name
 
+    published = data.get("published", {}) or {}
+    existing_id = published.get("shopify_id") or None
+
     print(f"\n🚀 推送: {product_name}")
-
-    # Check if already published
-    published = data.get("published", {})
-    existing_id = published.get("shopify_id")
     if existing_id:
-        print(f"  ℹ️  已發布過 (Shopify ID: {existing_id})")
-        print(f"  ℹ️  目前只支援建立新產品，如需更新請手動操作 Shopify 後台")
-        return
+        print(f"  ℹ️  已發布過 (Shopify ID: {existing_id})，將更新既有產品（圖片/選項/變體/價格）")
 
-    # Build input
-    input_data = build_product_input(data)
+    with httpx.Client(timeout=60) as client:
+        # 1. 上傳圖片
+        files_input = stage_and_upload_images(client, settings, product_dir, data)
 
-    with httpx.Client(timeout=30) as client:
-        # Create product
-        shopify_product = create_product(client, settings, input_data)
+        # 2. 建立選項 + 變體
+        options_input, variants_input = build_options_and_variants(data)
+
+        # 3. 組合 productSet input，一次送出 title/description/選項/變體/圖片
+        input_data = build_base_fields(data, settings)
+        if files_input:
+            input_data["files"] = files_input
+        input_data["productOptions"] = options_input
+        input_data["variants"] = variants_input
+
+        shopify_product = product_set(client, settings, input_data, existing_id)
         product_gid = shopify_product["id"]
         product_url = shopify_product.get("onlineStorePreviewUrl") or shopify_product.get("onlineStoreUrl") or ""
+        variant_count = len(shopify_product.get("variants", {}).get("nodes", []))
 
-        print(f"  ✅ 產品已建立")
+        print(f"  ✅ 產品已{'更新' if existing_id else '建立'}")
         print(f"  📦 Shopify ID: {product_gid}")
+        print(f"  🖼️  圖片: {len(files_input)} 張")
+        print(f"  🏷️  變體: {variant_count} 個")
         print(f"  🔗 預覽連結: {product_url}")
 
-        # Set metafields
+        # 4. 寫入 metafields
         metafields = build_metafields_input(product_gid, data)
         if metafields:
             set_metafields(client, settings, product_gid, metafields)
 
-    # Update published record
+    # 寫回發布記錄
     data["published"] = {
         "shopify_id": product_gid,
         "shopify_url": product_url,

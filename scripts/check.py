@@ -13,7 +13,7 @@
   ✅ 規格 (material/dimensions/weight) 至少一項
   ✅ 每張圖片都有 alt text
   ✅ FAQ ≥3 組
-  ✅ Tags 含 brand/category/origin
+  ✅ Tags 含固定的 curated:popo-select 標籤
   ✅ JSON-LD schema 有效
   ✅ 圖片清單非空
   ✅ 售價 > 0
@@ -31,14 +31,20 @@ import yaml
 
 
 # 供應鏈保密：客戶看得到（或 AI agent 讀得到）的文案裡，不能出現進貨來源、
-# 官網庫存監控、競業分析式的用語（例如「向官網下單」「台灣沒有代理」）。
+# 官網庫存監控、競業分析式的用語（例如「向官網下單」「台灣沒有代理」），
+# 也不能揭露日本原廠定價（¥xxx / 日幣xxx），這會讓人反推我們的進貨成本與利潤空間。
 # 這些是內部資訊，寫進公開文案等於告訴別人我們的商業模式。
 SOURCING_LEAK_PATTERNS = [
     r"官網下單", r"官方網站下單", r"向.{0,15}官網.{0,6}下單", r"向.{0,20}官方網站.{0,6}下單",
     r"官網.{0,4}(缺貨|現貨|有庫存|無庫存|在庫)",
     r"(沒有|無).{0,10}(官方|代理).{0,10}(通路|管道)", r"(沒有|無).{0,6}代理商",
     r"直接向.{0,20}下單", r"跟.{0,10}官網.{0,6}買", r"官網.{0,6}進貨",
+    r"¥[\d,]+", r"日幣.{0,4}[\d,]+", r"日圓.{0,4}[\d,]+", r"JPY.{0,4}[\d,]+",
+    r"日本(定價|售價|原價|訂價).{0,10}[\d,]+",
 ]
+
+# 每個產品固定只掛這一個標籤（標記「Popo 精選」），不再自己編 brand:/category:/style: 這些
+CURATION_TAG = "curated:popo-select"
 
 # 掃描這些欄位——凡是最終會出現在 Shopify 商品頁、metafields，或設計上將來要推送
 # 給 AI agent 讀取的內容，都算「公開文案」，用同一標準檢查。
@@ -173,8 +179,8 @@ CHECKLIST = [
         "id": "tags",
         "label": "Shopify 標籤",
         "fn": lambda d: _check_tags(d),
-        "detail": lambda d: f"目前: {len(d.get('tags') or [])} 個標籤",
-        "hint": "需含 brand:xxx, category:xxx, origin:japan",
+        "detail": lambda d: f"目前: {d.get('tags') or []}",
+        "hint": f"每個產品固定只掛一個標籤 {CURATION_TAG!r}，不用再自己編 brand:/category:/style: 這些",
     },
     {
         "id": "jsonld_product",
@@ -202,7 +208,7 @@ CHECKLIST = [
         "label": "供應鏈保密（不得洩露進貨來源）",
         "fn": _check_sourcing_confidentiality,
         "detail": _sourcing_confidentiality_detail,
-        "hint": "文案裡不能出現「向官網下單」「官網缺貨」「台灣沒有代理」這類洩露商業模式/競業分析的用語，庫存問題用 variants/stock_status 反映，不要在文案裡解釋原因",
+        "hint": "文案裡不能出現「向官網下單」「官網缺貨」「台灣沒有代理」這類洩露商業模式/競業分析的用語，也不能寫日本原廠定價（¥xxx/日幣xxx）。庫存問題用 variants/stock_status 反映，不要在文案裡解釋原因",
     },
 ]
 
@@ -226,11 +232,7 @@ def _alt_text_detail(data: dict) -> str:
 
 def _check_tags(data: dict) -> bool:
     tags = data.get("tags") or []
-    tag_str = " ".join(tags)
-    has_brand = "brand:" in tag_str
-    has_category = "category:" in tag_str
-    has_origin = "origin:" in tag_str
-    return has_brand and has_category and has_origin
+    return CURATION_TAG in tags
 
 
 def _check_jsonld(text: str | None) -> bool:

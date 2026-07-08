@@ -41,7 +41,16 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 4. **圖片 Alt Text**（繁中）：每張圖都有描述性 alt text
 5. **JSON-LD Schema**：Product + Offer(TWD) + Brand + shippingDetails
 6. **FAQ ≥3 組**：AI 搜尋特別喜歡引用 FAQ
-7. **標籤格式**：`brand:xxx, category:xxx, origin:japan` (namespace:value)
+7. **標籤**：固定掛 `curated:popo-select` 這一個標籤（標記「Popo 精選」），不用自己編
+   brand:/category:/style: 這些——查證後這些細分標籤沒有被 Shopify 官方列為 Agentic
+   Storefronts 會同步給 AI 助手的欄位（見 Shopify Help Center: Agentic storefronts
+   products），真正保證會被 AI 讀到的是 title/description/options/images/price/
+   availability + JSON-LD + metafields，這些才是重點
+8. **官方分類**：`shopify_taxonomy_id` 對應 Shopify Standard Product Taxonomy，用
+   Admin GraphQL `taxonomy { categories(search: "英文關鍵字") { edges { node { id
+   fullName } } } }` 查，找最接近的 fullName 填進去
+9. **Collection**：所有產品自動歸進「Popo選物」這個 collection，用 collection ID
+   （寫死在 `scripts/push.py` 的 `shopify_default_collection_id`，不是名稱，改名不影響）
 
 ## 工作流
 
@@ -51,10 +60,13 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
    cp products/_template/product.yaml products/bao-bao-lucent-m/
 
 ② 填寫基本欄位（你手動或 Claude 協助）
-   品牌、進價、售價、規格...
+   品牌、進價、售價、規格、variants（顏色/尺寸，缺貨的選項直接不列進去）
+   shopify_taxonomy_id 用 Admin GraphQL 查（見上面「官方分類」說明）
 
 ③ Claude 補完 AI 區段
-   標題、描述、SEO、alt text、FAQ、標籤、schema
+   標題、描述、SEO、alt text、FAQ、schema
+   （tags 固定填 [curated:popo-select]，不用自己編；不寫供應鏈細節、不寫日本原廠
+   定價，見 Constraints）
 
 ④ 質檢
    python scripts/check.py products/bao-bao-lucent-m
@@ -63,6 +75,10 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 
 ⑥ 推送到 Shopify
    python scripts/push.py products/bao-bao-lucent-m
+   實際動作：上傳 images/ 底下的圖片（含 alt text）→ 用 productSet mutation 一次
+   建立/更新 title/description/選項(variants)/價格/圖片/官方分類 → 寫入 metafields
+   → 自動歸進「Popo選物」collection。已經 published 過的產品重跑這個指令是「更新」
+   （靠 productSet 的 identifier 比對既有 Shopify ID），不是重複建立一個新產品
 
 ⑦ 查看狀態
    python scripts/status.py
@@ -77,8 +93,14 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
   faq、price_gap_note、jsonld_*）最終會出現在 Shopify 商品頁或 metafields，等於公開
   資訊（含 AI 購物助手讀得到的範圍）。絕對不寫「向官網下單」「官網缺貨/現貨」「台灣
   沒有官方或代理通路」這類洩露進貨來源、庫存監控方式、競業分析結論的句子——這些是
-  操作者的商業機密。缺貨的規格選項直接從 variants 移除，不要在文案裡解釋原因。
-  `scripts/check.py` 有自動掃描這類用語，但寫文案時就要避免，不要依賴工具兜底。
+  操作者的商業機密。**也不寫日本原廠定價**（¥xxx、日幣/日圓xxx、JPY xxx）——會讓人
+  反推進貨成本與利潤空間。缺貨的規格選項直接從 variants 移除，不要在文案裡解釋原因。
+  顏色/尺寸資訊已經在 variants 結構化欄位裡，description_fact 不用重複寫「目前為XX
+  色XX尺寸」。`scripts/check.py` 有自動掃描這類用語，但寫文案時就要避免，不要依賴
+  工具兜底。
+- **cost_jpy 例外**：`cost_jpy`（日本進價）是唯一允許寫進 Shopify metafields 的成本
+  數字（操作者定價時需要對照），但只放 metafield（admin-only，沒有 storefront 存取
+  權限），絕對不能出現在任何公開文案欄位裡。
 
 ## Risk Gates（永遠先確認）
 - `git push` — 確認後才推送
@@ -91,10 +113,12 @@ products/         ← 每個產品一個資料夾，內含 product.yaml + images
   _template/      ← 產品 YAML 模板
 sourcing/         ← 選品參考資料
   top100.yaml     ← 2026 台日代購 Top 100 選品清單
+  radar/          ← 台灣選品雷達（discovery + validation 兩層驗證方法論）
 scripts/          ← CLI 工具
-  push.py         ← 發布到 Shopify（DRAFT）
+  push.py         ← 發布到 Shopify（DRAFT，含圖片/選項/變體/價格/分類/collection）
   check.py        ← Agent-Ready 質檢
   status.py       ← 查看所有產品狀態
+  oauth_setup.py  ← Shopify custom app 一次性授權工具（token 被撤銷才需要重跑）
 tasks/            ← 規劃文件
 ```
 

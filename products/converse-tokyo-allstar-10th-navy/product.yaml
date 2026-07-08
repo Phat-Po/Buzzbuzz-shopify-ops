@@ -12,8 +12,7 @@ brand_jp: コンバース トウキョウ
 cost_jpy: 19800
 country_of_origin: 日本
 description_fact: CONVERSE TOKYO 為紀念品牌設立10週年推出的別注款 ALL STAR J OX，型號 A2854PSH900。鞋面採用美國工作服用帆布並做洗水加工，呈現做舊質感；內裡印有10週年紀念標誌，鞋舌處為
-  ALL STAR 與 CONVERSE TOKYO 雙標設計。定價 ¥19,800（約 NT$3,900，含稅），原產地日本，目前為深藍色、23.5cm（US
-  4.5）尺碼。
+  ALL STAR 與 CONVERSE TOKYO 雙標設計，原產地日本。
 description_feel: 深藍帆布搭配洗水做舊處理，比一般全新帆布鞋多了一點穿舊的隨性感，很適合牛仔褲、工裝褲這類美式休閒穿搭，也能壓一下過於甜美的洋裝造型增加街頭感。10週年紀念的內裡標誌和雙標鞋舌是這款最大的收藏亮點，喜歡
   Converse 但想找一雙不會撞鞋的人會特別有感。
 description_trust: 本商品為 BuzzBuzz 日本直送正品保證，非平行輸入或二手商品。採預購制，訂單成立後安排日本直送，實際到貨時間依國際配送時程而定。此商品原則上不接受退換貨，下單前請務必確認尺寸與顏色；商品到貨如有明顯瑕疵或誤送，請於收到後盡快與我們聯繫。
@@ -51,14 +50,15 @@ price_twd: 5980
 product_name: CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋（女款）
 product_type: 潮流服飾
 published:
-  published_at: '2026-07-08T10:40:36.794548+00:00'
+  published_at: '2026-07-08T11:08:01.965673+00:00'
   shopify_id: gid://shopify/Product/8148497727597
   shopify_status: draft
-  shopify_url: https://v0orwve1oqbhzf2s-69710020717.shopifypreview.com/products_preview?preview_key=e25ee28b3f9a0eb7c194388ae4e6d345
+  shopify_url: https://v0orwve1oqbhzf2s-69710020717.shopifypreview.com/products_preview?preview_key=88b1cb66bb33ec5c2da275cdd8afefa2
 season: 全年
 seo_meta: CONVERSE TOKYO 品牌10週年紀念別注款，美國工作服帆布洗水加工，日本限定稀有款，BuzzBuzz日本直送台灣，正品保證。
 seo_title: CONVERSE TOKYO 10週年限定深藍帆布鞋 日本直送｜BuzzBuzz
 shopify_category: 服飾與配件 > 鞋類 > 運動鞋
+shopify_taxonomy_id: gid://shopify/TaxonomyCategory/aa-8-8
 sourcing_status: limited
 status: published
 stock_status: pre_order
@@ -68,12 +68,7 @@ style_tags:
 - 限定
 - 工裝
 tags:
-- brand:converse-tokyo
-- category:sneakers
-- style:street
-- style:limited-edition
-- origin:japan
-- gender:women
+- curated:popo-select
 title_zh: 日本 CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 女款 | BuzzBuzz 日本選物
 variants:
 - option: 顏色
