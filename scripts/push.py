@@ -159,6 +159,80 @@ def build_metafields_input(product_gid: str, data: dict) -> list[dict]:
     return metafields
 
 
+def build_category_attribute_metafields(client: httpx.Client, settings: Settings, product_gid: str, data: dict) -> list[dict]:
+    """把 product.yaml 的 category_attributes（例: {Color: Blue, Target gender: Female}）
+    轉成 Shopify 的分類屬性 metafields（product_taxonomy_value_reference 型別）。
+
+    這是 Shopify Admin 商品頁「Category」卡片裡那些 Color/Target gender/Upper material
+    之類的下拉選單欄位，跟一般 metafieldsSet 用的自訂欄位是不同機制：值不是文字，而是
+    指向 Shopify 官方 TaxonomyValue 的 GID，且對應的 metafield definition 要用
+    `product_taxonomy_attribute_handle` validation 綁定到 taxonomy attribute（用
+    kebab-case handle，例如 "target-gender"），才會在 Category 卡片顯示。
+    """
+    category_attrs = data.get("category_attributes") or {}
+    taxonomy_id = data.get("shopify_taxonomy_id")
+    if not category_attrs or not taxonomy_id:
+        return []
+
+    query = """
+    query($id: ID!) {
+      node(id: $id) {
+        ... on TaxonomyCategory {
+          attributes(first: 50) {
+            edges {
+              node {
+                __typename
+                ... on TaxonomyChoiceListAttribute {
+                  name
+                  values(first: 250) {
+                    edges { node { id name } }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    """
+    resp = client.post(graphql_url(settings), json={"query": query, "variables": {"id": taxonomy_id}}, headers=graphql_headers(settings))
+    resp.raise_for_status()
+    body = resp.json()
+    if "errors" in body:
+        print(f"  ⚠️  查詢分類屬性失敗: {json.dumps(body['errors'], ensure_ascii=False)}")
+        return []
+
+    attr_edges = (body.get("data", {}).get("node") or {}).get("attributes", {}).get("edges", [])
+    attrs_by_name = {}
+    for edge in attr_edges:
+        node = edge["node"]
+        if node.get("__typename") != "TaxonomyChoiceListAttribute":
+            continue
+        values_by_name = {v["node"]["name"].lower(): v["node"]["id"] for v in node["values"]["edges"]}
+        attrs_by_name[node["name"].lower()] = values_by_name
+
+    metafields = []
+    for attr_name, value_name in category_attrs.items():
+        values_by_name = attrs_by_name.get(attr_name.lower())
+        if values_by_name is None:
+            print(f"  ⚠️  分類屬性「{attr_name}」不屬於這個 taxonomy category，跳過")
+            continue
+        value_id = values_by_name.get(str(value_name).lower())
+        if value_id is None:
+            print(f"  ⚠️  分類屬性「{attr_name}」沒有選項「{value_name}」，跳過")
+            continue
+        key = attr_name.lower().replace(" ", "_")
+        metafields.append({
+            "ownerId": product_gid,
+            "namespace": "buzzbuzz",
+            "key": key,
+            "type": "product_taxonomy_value_reference",
+            "value": value_id,
+        })
+
+    return metafields
+
+
 def create_staged_upload(client: httpx.Client, settings: Settings, filename: str, mime_type: str) -> dict:
     """呼叫 stagedUploadsCreate，拿到暫存上傳目標（url + resourceUrl + parameters）"""
     mutation = """
@@ -422,8 +496,9 @@ def push_product(product_dir: Path) -> None:
         print(f"  🏷️  變體: {variant_count} 個")
         print(f"  🔗 預覽連結: {product_url}")
 
-        # 4. 寫入 metafields
+        # 4. 寫入 metafields（一般欄位 + 分類屬性）
         metafields = build_metafields_input(product_gid, data)
+        metafields += build_category_attribute_metafields(client, settings, product_gid, data)
         if metafields:
             set_metafields(client, settings, product_gid, metafields)
 

@@ -9,6 +9,11 @@ alt_texts:
   images/photo-main.jpg: CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 正面成對照，附10週年紀念徽章與WOMEN'S字樣
 brand_en: CONVERSE TOKYO
 brand_jp: コンバース トウキョウ
+category_attributes:
+  Age group: Adults
+  Color: Blue
+  Target gender: Female
+  Upper material: Canvas
 cost_jpy: 19800
 country_of_origin: 日本
 description_fact: CONVERSE TOKYO 為紀念品牌設立10週年推出的別注款 ALL STAR J OX，型號 A2854PSH900。鞋面採用美國工作服用帆布並做洗水加工，呈現做舊質感；內裡印有10週年紀念標誌，鞋舌處為
@@ -50,7 +55,7 @@ price_twd: 5980
 product_name: CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋（女款）
 product_type: 潮流服飾
 published:
-  published_at: '2026-07-08T12:09:24.821909+00:00'
+  published_at: '2026-07-08T12:17:35.134927+00:00'
   shopify_id: gid://shopify/Product/8148497727597
   shopify_status: draft
   shopify_url: https://v0orwve1oqbhzf2s-69710020717.shopifypreview.com/products_preview?preview_key=ba47d624cac92d5ec5911be3bef4e9ff

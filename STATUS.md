@@ -4,39 +4,45 @@
 
 ---
 
-## 2026-07-08 | push.py 補完圖片/變體/分類/collection，供應鏈保密規則收斂
+## 2026-07-08 | Category 屬性打通、URL handle/SEO/metafields 收尾
 
 **Done this session:**
-- `push.py` 改用 `productSet` mutation（Shopify 目前建議的單一 mutation，取代已棄用的
-  `productCreate` + `productCreateMedia` + `productVariantsBulkCreate` 三段式流程）：
-  一次送出 title/description/選項(variants)/價格/圖片，圖片走 `stagedUploadsCreate`
-  兩段式上傳（先拿暫存網址，把本地檔案傳上去，再交給 productSet）
-- 新增支援對已發布產品重跑 `push.py`＝更新（`productSet` 的 `identifier` 比對既有
-  Shopify ID），不再是舊版「已發布過就跳過」
-- 補上 `shopify_taxonomy_id`（Shopify 官方標準分類）與 `shopify_default_collection_id`
-  （所有產品自動歸進「Popo選物」collection，用 ID 不是名稱，改名不影響）
-- 修了一個真實的供應鏈保密違規：`description_fact` 曾寫出日本原廠定價（¥19,800），
-  已改掉並補進 `check.py` 的自動掃描規則（擋 ¥xxx/日幣xxx/JPY xxx）
-- Tags 從「brand:/category:/style:/origin:/gender: 六個標籤」簡化成固定一個
-  `curated:popo-select`——查證 Shopify 官方文件後確認細分標籤沒有被列為 Agentic
-  Storefronts 會同步給 AI 助手的欄位，簡化掉沒有實際效益的複雜度
-- 在 Shopify 建了 5 個 metafield definition 並 pin（brand_en/material/price_gap_note/
-  season/gender），後台商品頁現在看得到這些值（之前有寫入但沒 definition，UI 顯示
-  「No metafields pinned」）
-- CONVERSE TOKYO 這個產品已經用新版 push.py 重推過，Shopify 上現在有 8 張圖、正確
-  選項/變體/價格、官方分類、collection
+- 找到 Shopify Admin 商品頁「Category」卡片（Color/Target gender/Upper material 這些
+  下拉選單）的正確 API 寫法：`product_taxonomy_value_reference` 型別 metafield，
+  definition 要用 `product_taxonomy_attribute_handle` validation 綁定 taxonomy
+  attribute 的 kebab-case handle（例如 `target-gender`），值是 `TaxonomyValue` GID，
+  不是文字——這個機制文件不完整，靠 introspection + 試錯才挖出正確格式
+- `push.py` 新增 `build_category_attribute_metafields()`：讀 product.yaml 的
+  `category_attributes`（人看得懂的 `{Color: Blue, Target gender: Female}` 格式），
+  push 時動態查對應 category 的 taxonomy attribute/value，自動轉成正確的 GID 型
+  metafield——設計成通用機制，不是寫死 CONVERSE TOKYO 專用
+- 建了 4 個對應的 metafield definition 並 pin（color/target_gender/age_group/
+  upper_material），CONVERSE TOKYO 已重推驗證：16 個 metafields 全部正確寫入
+- 補 `url_handle` 欄位：`productSet` 的 `handle` 之前沒設，Shopify 用中文標題自動產生
+  slug，瀏覽器網址列變成一長串 %E6%97%A5... 編碼——現在改用 ASCII slug
+  （`converse-tokyo-10th-allstar-j-ox-navy`）
+- `price_gap_note` 不再寫進 Shopify metafields（操作者要求，純內部分析欄位），已刪除
+  對應的 metafield definition
+- CONVERSE TOKYO 的 `seo_meta` 換成強化版（型號+緊迫感），照操作者要求**不寫確切價格**
+  （調價後 SERP 顯示舊價格會傷信任）
+- Tags 簡化成固定 `curated:popo-select`（上一輪已改 check.py/template，這輪實際重推
+  讓 Shopify 上的舊 6 標籤生效替換）
 
 **Current state:**
-`push.py`/`check.py`/`_template/product.yaml` 的改動都完成且驗證過（對 CONVERSE TOKYO
-實際 push 到 Shopify 確認）。CONVERSE TOKYO 產品目前 tags 還是舊格式（6 個），本輪只
-改了 template 和 push.py 邏輯，還沒重新 push 讓新 tag scheme 生效（操作者要求先不要
-再 push，之後自己決定時機）。
+CONVERSE TOKYO 是目前唯一的真實產品，已完整驗證：8 張圖＋alt text、1 個變體含正確
+價格、官方 taxonomy 分類、4 個分類屬性、16 個一般 metafields、ASCII url handle、
+單一 curation tag、collection「Popo選物」，全部在 Shopify 上確認過。`push.py`/
+`check.py`/`_template/product.yaml` 現在是穩定狀態，下一個新產品照 AGENTS.md 工作流
+①-⑦ 走應該不會撞到這些坑。
 
 **Next steps:**
-1. 找操作者確認時機後，重推 CONVERSE TOKYO 讓新 tag（`curated:popo-select`）生效
-2. 繼續往下跑選品（`sourcing/radar/` 或 `top100-validation-sweep-plan.md`）
+1. 繼續往下跑選品（`sourcing/radar/` 或 `top100-validation-sweep-plan.md`）
+2. 下一個新產品建立時，實測一次完整工作流（含 category_attributes/url_handle 這些
+   新欄位），確認 AGENTS.md 的說明對得上實際操作
 
 **Decisions / notes:**
+- `category_attributes` 的 taxonomy attribute/value 查詢是 push 時動態查的（不是寫死
+  在 push.py 裡），換分類或換值都不用改程式碼，只要改 product.yaml
 - Tags 對傳統 Google SEO 沒有直接幫助；對 AI agent 的幫助也沒有 Shopify 官方保證
   （官方列出的同步欄位是 title/description/options/images/price/availability，不含
   tags）——固定一個 curation tag 就夠，不用堆疊細分標籤
@@ -45,6 +51,8 @@
 
 ## ■ Milestones
 
+- 2026-07-08 push.py 補完圖片/變體上傳（`productSet` 取代已棄用的三段式 mutation）、
+  供應鏈保密規則收斂（擋日圓原價）、tags 簡化為單一 curation 標籤 | ✅ done
 - 2026-07-08 選品雷達上線（`sourcing/radar/` discovery+validation 兩層方法論）+ 打通 Shopify OAuth（`scripts/oauth_setup.py`）+ 第一個產品（CONVERSE TOKYO）成功推送 Shopify DRAFT | ✅ done
 - 2026-07-07 項目重新定位：從 ERP 改為本地 CLI 上稿工具，建立 products/YAML 模板、三個 CLI 腳本、Top100 選品清單 | ✅ done
 
