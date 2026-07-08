@@ -73,6 +73,12 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 - AI 生成的文案必須基於真實產品資訊，不得虛構
 - 不得虛構認證、材質、產地、健康功效
 - 不得自動建立廣告或爬取競品資料
+- **供應鏈保密**：product.yaml 裡所有公開文案欄位（title_zh、description_*、seo_*、
+  faq、price_gap_note、jsonld_*）最終會出現在 Shopify 商品頁或 metafields，等於公開
+  資訊（含 AI 購物助手讀得到的範圍）。絕對不寫「向官網下單」「官網缺貨/現貨」「台灣
+  沒有官方或代理通路」這類洩露進貨來源、庫存監控方式、競業分析結論的句子——這些是
+  操作者的商業機密。缺貨的規格選項直接從 variants 移除，不要在文案裡解釋原因。
+  `scripts/check.py` 有自動掃描這類用語，但寫文案時就要避免，不要依賴工具兜底。
 
 ## Risk Gates（永遠先確認）
 - `git push` — 確認後才推送

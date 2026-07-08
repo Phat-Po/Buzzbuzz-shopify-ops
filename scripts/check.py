@@ -17,15 +17,71 @@
   ✅ JSON-LD schema 有效
   ✅ 圖片清單非空
   ✅ 售價 > 0
+  ✅ 供應鏈保密（文案不得洩露進貨來源/官網庫存/競業分析用語）
 """
 
 from __future__ import annotations
 
+import re
 import sys
 import json
 from pathlib import Path
 
 import yaml
+
+
+# 供應鏈保密：客戶看得到（或 AI agent 讀得到）的文案裡，不能出現進貨來源、
+# 官網庫存監控、競業分析式的用語（例如「向官網下單」「台灣沒有代理」）。
+# 這些是內部資訊，寫進公開文案等於告訴別人我們的商業模式。
+SOURCING_LEAK_PATTERNS = [
+    r"官網下單", r"官方網站下單", r"向.{0,15}官網.{0,6}下單", r"向.{0,20}官方網站.{0,6}下單",
+    r"官網.{0,4}(缺貨|現貨|有庫存|無庫存|在庫)",
+    r"(沒有|無).{0,10}(官方|代理).{0,10}(通路|管道)", r"(沒有|無).{0,6}代理商",
+    r"直接向.{0,20}下單", r"跟.{0,10}官網.{0,6}買", r"官網.{0,6}進貨",
+]
+
+# 掃描這些欄位——凡是最終會出現在 Shopify 商品頁、metafields，或設計上將來要推送
+# 給 AI agent 讀取的內容，都算「公開文案」，用同一標準檢查。
+PUBLIC_FACING_TEXT_FIELDS = [
+    "title_zh", "seo_title", "seo_meta",
+    "description_fact", "description_feel", "description_trust",
+    "price_gap_note", "jsonld_product", "jsonld_faq",
+]
+
+
+def _collect_public_text(data: dict) -> list[tuple[str, str]]:
+    """回傳 [(欄位名, 文字內容), ...]，含 FAQ 的每組 q/a"""
+    texts = []
+    for field in PUBLIC_FACING_TEXT_FIELDS:
+        v = data.get(field)
+        if v:
+            texts.append((field, str(v)))
+    for i, item in enumerate(data.get("faq") or []):
+        if item.get("q"):
+            texts.append((f"faq[{i}].q", item["q"]))
+        if item.get("a"):
+            texts.append((f"faq[{i}].a", item["a"]))
+    return texts
+
+
+def _check_sourcing_confidentiality(data: dict) -> bool:
+    return len(_sourcing_leak_hits(data)) == 0
+
+
+def _sourcing_leak_hits(data: dict) -> list[str]:
+    hits = []
+    for field, text in _collect_public_text(data):
+        for pattern in SOURCING_LEAK_PATTERNS:
+            if re.search(pattern, text):
+                hits.append(f"{field}: 命中「{pattern}」")
+    return hits
+
+
+def _sourcing_confidentiality_detail(data: dict) -> str:
+    hits = _sourcing_leak_hits(data)
+    if not hits:
+        return "沒有偵測到供應鏈洩露用語"
+    return " ｜ ".join(hits[:3]) + (f"（共 {len(hits)} 處）" if len(hits) > 3 else "")
 
 
 CHECKLIST = [
@@ -140,6 +196,13 @@ CHECKLIST = [
         "fn": lambda d: (d.get("price_twd") or 0) > 0,
         "detail": lambda d: f"目前: NT${d.get('price_twd', 0)}",
         "hint": "售價為 0 的產品不會被 Catalog 收錄",
+    },
+    {
+        "id": "sourcing_confidentiality",
+        "label": "供應鏈保密（不得洩露進貨來源）",
+        "fn": _check_sourcing_confidentiality,
+        "detail": _sourcing_confidentiality_detail,
+        "hint": "文案裡不能出現「向官網下單」「官網缺貨」「台灣沒有代理」這類洩露商業模式/競業分析的用語，庫存問題用 variants/stock_status 反映，不要在文案裡解釋原因",
     },
 ]
 
