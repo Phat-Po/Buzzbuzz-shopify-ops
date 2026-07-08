@@ -4,6 +4,41 @@
 
 ---
 
+## 2026-07-08 | top100 驗證批次 3 完成（8 品牌），TNF Purple Label A 信號重測修正
+
+**Done this session:**
+- 跑完 `top100-validation-sweep-plan.md` 批次 3 的 8 個 ★★★ 品牌全信號驗證：
+  HYKE x Porter(17)、Danton(28)、Nanamica(32)、TNF Purple Label(33)、
+  Arai 安全帽(51)、Shoei 安全帽(52)、Pokemon Center Japan 限定(70)、
+  Traveler's Company(99)
+- TNF Purple Label A 信號重測：原關鍵詞「TNF Purple Label」熱度 0 是關鍵詞不匹配，
+  改用台灣人實際搜的「紫標」重測 → 56.6（命中），從 2/4 升格 3/4 → 候選
+- 結果寫入 `sourcing/radar/candidates.md`，更新 overview 總覽表
+- 本批亮點：Shoei 4/4（價差 40-50%，PTT 鄉民背書）、TNF Purple Label 3/4（通路最乾淨，
+  台灣完全無官方管道）、Pokemon Center Japan 限定 3/4（日本各地區限定款台北店不進）
+
+**Current state:**
+三批累計 24 個 ★★★ 品牌已驗證：可推進 2（Human Made、Mont-bell）、有條件候選 13、
+觀察池 9、排除 0。★★★ 剩餘約 14 個（批次 4-5）。觀察池中 HYKE x Porter 和
+Traveler's Company 建議不投入資源（niche/客單價太低）。
+`sourcing/radar/candidates.md` 和 `tasks/top100-validation-sweep-plan.md` 已同步更新。
+
+**Next steps:**
+1. 操作者確認是否繼續批次 4（Issey Miyake Homme Plisse、Snow Peak Apparel、
+   KATO/TOMIX 鐵道模型、Medicom Be@rbrick、Tamashii Nations 限定、
+   Origami Dripper、Vermicular）
+2. 自有物流報價確定後，回頭補所有候選的 D-3 淨利試算
+
+**Decisions / notes:**
+- 安全帽品類（Arai/Shoei）信號極強但實務障礙多：體積大運費高、無法試戴、水貨無保固
+- TNF Purple Label 是 8 個品牌中通路最乾淨的（台灣完全無官方管道），代購有獨佔性
+- Pokemon Center Japan 的代購生態系已極度成熟，需找差異化切入點（目前建議從地區限定
+  小物開始）
+- 「紫標」關鍵詞教訓：check_trends.py 用的英文詞不一定匹配台灣搜尋習慣，以後驗證
+  潮流品牌時應先測台灣慣用的中文簡稱
+
+---
+
 ## 2026-07-08 | Category 屬性打通、URL handle/SEO/metafields 收尾
 
 **Done this session:**
