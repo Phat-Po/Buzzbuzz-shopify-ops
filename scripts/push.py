@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     shopify_admin_token: str = ""
     shopify_api_version: str = "2026-04"
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {"env_file": ".env", "env_file_encoding": "utf-8", "extra": "ignore"}
 
 
 def load_product(product_dir: Path) -> dict:
@@ -128,10 +128,10 @@ def build_metafields_input(product_gid: str, data: dict) -> list[dict]:
     return metafields
 
 
-def create_product(client: httpx.Client, settings: Settings, input_data: dict, metafields: list[dict]) -> dict:
+def create_product(client: httpx.Client, settings: Settings, input_data: dict) -> dict:
     """呼叫 Shopify GraphQL API 建立產品"""
     mutation = """
-    mutation createProduct($input: ProductInput!, $metafields: [MetafieldsSetInput!]!) {
+    mutation createProduct($input: ProductInput!) {
       productCreate(input: $input) {
         product {
           id
@@ -149,7 +149,6 @@ def create_product(client: httpx.Client, settings: Settings, input_data: dict, m
 
     variables = {
         "input": input_data,
-        "metafields": metafields,
     }
 
     url = f"https://{settings.shopify_store}/admin/api/{settings.shopify_api_version}/graphql.json"
@@ -246,7 +245,7 @@ def push_product(product_dir: Path) -> None:
 
     with httpx.Client(timeout=30) as client:
         # Create product
-        shopify_product = create_product(client, settings, input_data, [])
+        shopify_product = create_product(client, settings, input_data)
         product_gid = shopify_product["id"]
         product_url = shopify_product.get("onlineStorePreviewUrl") or shopify_product.get("onlineStoreUrl") or ""
 
