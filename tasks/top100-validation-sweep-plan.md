@@ -1,6 +1,6 @@
 # top100.yaml 驗證專用掃描計劃
 
-> 狀態：**批次 1-3 完成**（2026-07-08），批次 4 待操作者確認後執行
+> 狀態：**批次 1-4 完成**（2026-07-08），批次 5 待操作者確認後執行
 > 目的：把 `sourcing/top100.yaml` 剩下沒驗證過的品牌，逐批跑過 `validation-signals.md` 的
 > 2-of-4 信號驗證，跟 discovery 層完全分開，不要混在一起。
 
@@ -27,7 +27,7 @@ discovery 來源的候選分清楚。
 - Knot Watch（no.95）— 2/4，降級觀察
 - **✅ 批次 1 完成（2026-07-08）：BAO BAO(1)、PLEATS PLEASE(2)、Porter(4)、Human Made(21)、WTAPS(22)、Mont-bell(41)、Snow Peak(42)、Hario(76)** — 全數 4/4 命中（Hario 3/4），詳見 `sourcing/radar/candidates.md`
 - **✅ 批次 2 完成（2026-07-08）：Hender Scheme(8)、Aeta(9)、Neighborhood(23)、Needles(25)、Yamatomichi(43)、Shimano(54)、Daiwa(55)、Kalita(77)** — 僅 Neighborhood 4/4 強候選，其餘 1-3/4 多入觀察池，詳見 `sourcing/radar/candidates.md`
-- **✅ 批次 3 完成（2026-07-08）：HYKE x Porter(17)、Danton(28)、Nanamica(32)、TNF Purple Label(33)、Arai(51)、Shoei(52)、Pokemon Center Japan 限定(70)、Traveler's Company(99)** — Shoei/Arai 4/4 最強；Danton/Nanamica/TNF Purple Label(A重測後3/4)/Pokemon Center 3/4 候選；HYKE/Traveler's Company 2/4 觀察池，詳見 `sourcing/radar/candidates.md`
+- **✅ 批次 4 完成（2026-07-08）：Issey Miyake Homme Plisse(34)、Snow Peak Apparel(38)、KATO 鐵道模型(61)、TOMIX 鐵道模型(62)、Medicom Be@rbrick(64)、Tamashii Nations 限定(65)、Origami Dripper(78)、Vermicular(83)** — Vermicular 4/4 全命中最強；KATO/Origami 3/4 可推進；其餘 2-3/4 有條件候選，詳見 `sourcing/radar/candidates.md`
 
 剩下 **97 個品牌**沒有跑過任何驗證。
 
