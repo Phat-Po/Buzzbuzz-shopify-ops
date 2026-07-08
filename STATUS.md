@@ -4,6 +4,38 @@
 
 ---
 
+## 2026-07-08 | Category 卡片下拉選單確認為平台限制，無法用 API 自動化
+
+**Done this session:**
+- 找到 Admin 商品頁「Category」卡片（Color/Target gender/Age group 下拉選單）真正的
+  機制：`shopify` 保留 namespace + `list.metaobject_reference` 型別，要先用
+  `standardMetafieldDefinitionEnable` mutation 啟用（不是上一輪用的
+  `product_taxonomy_value_reference` 自訂 definition，那是另一條路，資料正確但不會
+  顯示在這張卡片裡）
+- 對 CONVERSE TOKYO 啟用了 Color/Target gender/Age group 三個標準欄位（Upper material
+  沒有官方 standard template，這條路徑做不到）
+- 確認背後的選項值（metaobject，例如「Blue」「Female」）第三方 app token 讀不到也寫不
+  進去：`metaobjects(type: "shopify--color-pattern")` 查詢回空、直接塞值被 Shopify 拒絕
+  （錯誤訊息「Value require that you select a metaobject」）——這是 Shopify 平台限制，
+  已寫進 AGENTS.md，之後不用重新研究
+- 上一輪建的 4 個 `buzzbuzz` namespace 分類屬性 metafield（`product_taxonomy_value_reference`
+  型別）維持不動，資料正確（TaxonomyValue GID），只是不會出現在 Category 卡片，其他
+  讀 metafields 的工具還是讀得到
+
+**Current state:**
+Category 卡片現在應該會顯示 Color/Target gender/Age group 三個可填的下拉選單（之前完全
+沒 enable，可能連欄位都不會出現），但值是空的，需要操作者自己在 Admin 手動點選。
+Upper material 沒有官方 standard template，這張卡片永遠不會有這個欄位可填。這件事到此
+為止，不會再花時間找自動化的路——已經確認是平台限制。
+
+**Next steps:**
+1. 操作者有空時自己去 Admin 手動填 Color/Target gender/Age group（每個產品約 2 分鐘）
+2. 繼續往下跑選品（`sourcing/radar/` 或 `top100-validation-sweep-plan.md`）
+
+**Decisions / notes:**
+- Category 卡片下拉選單「不可 API 自動化」是確認過的平台限制，不是 bug，未來遇到同樣
+  需求直接跳過嘗試，改建議操作者手動填
+
 ## 2026-07-08 | top100 驗證批次 3 完成（8 品牌），TNF Purple Label A 信號重測修正
 
 **Done this session:**

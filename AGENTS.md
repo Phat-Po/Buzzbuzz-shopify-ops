@@ -53,10 +53,18 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
    （寫死在 `scripts/push.py` 的 `shopify_default_collection_id`，不是名稱，改名不影響）
 10. **URL Handle**：`url_handle` 必填，全英文 ASCII kebab-case，不要用中文標題自動產生
     的 slug（中文 slug 在瀏覽器網址列會變成一長串 %E6%97%A5... 編碼）
-11. **分類屬性**：`category_attributes` 選填，對應 Admin 商品頁「Category」卡片的
-    Color/Target gender/Upper material 這些結構化下拉選單（跟一般 metafields 是不同機制，
-    值是 Shopify TaxonomyValue 的 GID，push.py 會自動查對應 ID，不用自己找），對 Google
-    Shopping 之類的結構化篩選有幫助。查法見 `products/_template/product.yaml` 裡的說明
+11. **分類屬性**：`category_attributes` 選填，push.py 會轉成 `product_taxonomy_value_reference`
+    型別 metafield（值是 Shopify TaxonomyValue GID，push.py 自動查，不用自己找），對
+    Google Shopping 之類的結構化篩選有幫助。查法見 `products/_template/product.yaml`。
+    **已知限制**：這**不是** Admin 商品頁「Category」卡片（Color/Target gender 那些下拉選單）
+    實際用的機制——那個卡片是另一套：`shopify` 保留 namespace + `list.metaobject_reference`
+    型別，要先用 `standardMetafieldDefinitionEnable` 啟用，但背後的選項值（「Blue」「Female」
+    這些）是 Shopify 內部 metaobject，**第三方 app token 查不到也寫不進去**（`metaobjects(type:
+    "shopify--color-pattern")` 回空、硬塞值會被拒絕並回「Value require that you select a
+    metaobject」）。這是 Shopify 平台限制，不是我們程式碼的問題，已用 CONVERSE TOKYO 實測
+    確認，不用重新研究。Category 卡片的下拉選單只能操作者自己在 Admin 手動點選（一個產品
+    約 2 分鐘），無法透過 push.py 自動化。`category_attributes` 寫進去的資料仍然有效
+    （structured metafield，其他工具讀得到），只是不會顯示在那張卡片裡
 12. **SEO Meta 寫法**：善用 160 字上限，型號/賣點/緊迫感都可以寫，但**不要寫確切價格**
     （調價後會過期，SEO snippet 顯示舊價格反而傷信任）
 
