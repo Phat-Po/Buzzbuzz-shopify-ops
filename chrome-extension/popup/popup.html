@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BuzzBuzz 商品擷取</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__title">🐝 BuzzBuzz</h1>
+    <span class="header__subtitle">商品擷取</span>
+  </header>
+
+  <main class="main">
+    <!-- 狀態列 -->
+    <div id="status" class="status status--idle">
+      <span class="status__icon">🔍</span>
+      <span class="status__text">請開啟日本品牌官網商品頁</span>
+    </div>
+
+    <!-- 預覽卡片（隱藏直到擷取成功） -->
+    <section id="preview" class="preview preview--hidden">
+      <div class="preview__header">
+        <span class="preview__brand" id="preview-brand"></span>
+        <span class="preview__price" id="preview-price"></span>
+      </div>
+      <h2 class="preview__name" id="preview-name"></h2>
+
+      <div class="preview__meta">
+        <div class="preview__meta-item">
+          <span class="label">Variants</span>
+          <span id="preview-variants"></span>
+        </div>
+        <div class="preview__meta-item">
+          <span class="label">圖片</span>
+          <span id="preview-images"></span>
+        </div>
+        <div class="preview__meta-item">
+          <span class="label">類型</span>
+          <span id="preview-type"></span>
+        </div>
+      </div>
+
+      <!-- 可編輯欄位 -->
+      <div class="editable-fields">
+        <div class="field">
+          <label class="field__label" for="edit-type">商品類型</label>
+          <select id="edit-type" class="field__select">
+            <option value="">— 請選擇 —</option>
+            <option value="包袋">包袋</option>
+            <option value="潮流服飾">潮流服飾</option>
+            <option value="戶外運動">戶外運動</option>
+            <option value="收藏玩具">收藏玩具</option>
+            <option value="咖啡器具">咖啡器具</option>
+            <option value="廚房生活">廚房生活</option>
+            <option value="腕錶配件">腕錶配件</option>
+            <option value="生活美妝">生活美妝</option>
+            <option value="文具選品">文具選品</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field__label" for="edit-price">售價 (TWD)</label>
+          <input type="number" id="edit-price" class="field__input" placeholder="0" min="0" step="100">
+        </div>
+        <div class="field">
+          <label class="field__label" for="edit-handle">URL Handle</label>
+          <input type="text" id="edit-handle" class="field__input" placeholder="brand-product-name-color">
+        </div>
+      </div>
+    </section>
+
+    <!-- 錯誤訊息 -->
+    <div id="error" class="error error--hidden">
+      <span class="error__icon">⚠️</span>
+      <span class="error__text" id="error-text"></span>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <button id="btn-copy" class="btn btn--secondary" disabled>📋 複製 YAML</button>
+    <button id="btn-zip" class="btn btn--primary" disabled>📦 下載 ZIP</button>
+  </footer>
+
+  <script src="../lib/jszip.min.js"></script>
+  <script src="../content/utils/yaml-builder.js"></script>
+  <script src="../content/utils/image-packer.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

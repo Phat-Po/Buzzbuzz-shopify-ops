@@ -112,6 +112,10 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 
 ④ 填寫基本欄位（你手動或 Claude 協助）
    品牌、進價、售價、規格、variants（顏色/尺寸，缺貨的選項直接不列進去）
+   ⚠️ **Variants 必須從產品頁 HTML JSON 提取**：用 `grep -oP '"color_name_en":"[^"]+"'`
+   從步驟③下載的 HTML 中提取實際顏色選項，再用 `grep` 搜 `"sizes"` 提取尺寸。
+   嚴禁自行推測或編造顏色/尺寸——上一個 agent 編了「酒紅」「米白」「Olive Green」
+   三個不存在於 Mont-bell 產品頁的顏色（實際是 BLACK/BLUE/DARK GREEN/ORANGE/TAN 25）。
    shopify_taxonomy_id 用 Admin GraphQL 查（見上面「官方分類」說明）
    url_handle 用英文 ASCII slug 填（見上面「URL Handle」說明）
    category_attributes 選填，查法見上面「分類屬性」說明

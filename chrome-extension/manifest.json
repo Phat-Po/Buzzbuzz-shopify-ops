@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "BuzzBuzz 商品擷取",
+  "version": "1.0",
+  "description": "從日本品牌官網擷取商品資訊，一鍵匯出 product.yaml + 圖片 ZIP",
+  "permissions": ["activeTab", "scripting", "downloads"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "BuzzBuzz 商品擷取"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
