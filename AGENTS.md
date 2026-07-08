@@ -31,6 +31,16 @@ Claude 不透過 API 呼叫 — 而是直接編輯本地檔案，你審核後再
 - **價值主張**：日本好物直送台灣，正品保證，比台灣百貨便宜 30-60%
 - **目標客群**：對日本品牌有認知、在意質感和價差的台灣消費者
 
+## 定價策略（內部 — 不對外公開）
+
+**優先級**：台灣行情反推 > 干森費率公式
+
+1. **優先參考台灣行情**：搜尋同款商品在台灣的售價（Mont-bell 直營門市、選物店、蝦皮商城、PChome、momo 等），取中位數，定價比台灣行情低 10-25%
+2. **無台灣參考價時**：才用干森費率公式試算（見 `sourcing/shipping-costs.yaml`），確保毛利率 ≥ 35%
+3. **所有台灣價格來源必須存檔**：每個產品在 `sourcing/price-refs/` 目錄下建立 `<product-slug>.md`，記錄台灣價格來源 URL、截圖、查價日期、售價。操作者可據此認證定價合理性
+4. **所有日本官方產品頁面連結必須存檔**：同上檔案，記錄 Mont-bell 日本官網或其他購買通路網址，操作者下單時可直接使用
+5. **成本結構永不公開**：干森費率、運費公式、D-3 計算、進價（cost_jpy）僅存在內部檔案（`sourcing/shipping-costs.yaml`、`sourcing/price-refs/`、product.yaml 的非公開欄位），絕不寫入任何 Shopify 公開欄位（title、description、SEO、FAQ、JSON-LD、metafields 的 storefront-visible namespace）
+
 ## Agent-Ready 標準（Shopify Spring '26）
 
 Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT、Google Gemini、Microsoft Copilot 等 AI 平台。要讓 BuzzBuzz 產品在 AI 搜尋中被引用，每個產品頁需符合：
@@ -71,29 +81,39 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 ## 工作流
 
 ```
-① 建立產品資料夾
-   mkdir -p products/bao-bao-lucent-m/images
-   cp products/_template/product.yaml products/bao-bao-lucent-m/
+⓪ 選品調研（每個品牌做一次，結果存檔到 sourcing/radar/<brand>-brief.md）
+   — 免重複調查：品牌驗證、熱門 SKU、台灣行情、日本官網連結
+   — 調研結果供後續 SKU 複用，不重跑
 
-② 填寫基本欄位（你手動或 Claude 協助）
+① 定價調研（每個 SKU 做一次）
+   — 搜尋台灣價格來源（直營門市、選物店、蝦皮商城、PChome、momo）
+   — 存檔到 sourcing/price-refs/<product-slug>.md（含 URL、售價、查價日期）
+   — 記錄日本官網商品頁面 URL（操作者下單用）
+   — 依台灣行情反推定價；無參考才用干森費率公式
+
+② 建立產品資料夾
+   mkdir -p products/<product-slug>/images
+   cp products/_template/product.yaml products/<product-slug>/
+
+③ 填寫基本欄位（你手動或 Claude 協助）
    品牌、進價、售價、規格、variants（顏色/尺寸，缺貨的選項直接不列進去）
    shopify_taxonomy_id 用 Admin GraphQL 查（見上面「官方分類」說明）
    url_handle 用英文 ASCII slug 填（見上面「URL Handle」說明）
    category_attributes 選填，查法見上面「分類屬性」說明
 
-③ Claude 補完 AI 區段
+④ Claude 補完 AI 區段
    標題、描述、SEO、alt text、FAQ、schema
    （tags 固定填 [curated:popo-select]，不用自己編；不寫供應鏈細節、不寫日本原廠
    定價，見 Constraints；seo_meta 善用 160 字上限但不寫確切價格，見上面「SEO Meta
    寫法」；price_gap_note 只供內部分析，不會推送到 Shopify）
 
-④ 質檢
-   python scripts/check.py products/bao-bao-lucent-m
+⑤ 質檢
+   python scripts/check.py products/<product-slug>
 
-⑤ 審核 + 修正
+⑥ 審核 + 修正
 
-⑥ 推送到 Shopify
-   python scripts/push.py products/bao-bao-lucent-m
+⑦ 推送到 Shopify
+   python scripts/push.py products/<product-slug>
    實際動作：上傳 images/ 底下的圖片（含 alt text）→ 用 productSet mutation 一次
    建立/更新 title/description/選項(variants)/價格/圖片/官方分類/url_handle →
    寫入一般 metafields（不含 price_gap_note）→ 寫入 category_attributes 分類屬性
@@ -101,7 +121,7 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
    published 過的產品重跑這個指令是「更新」（靠 productSet 的 identifier 比對既有
    Shopify ID），不是重複建立一個新產品
 
-⑦ 查看狀態
+⑧ 查看狀態
    python scripts/status.py
 ```
 
@@ -134,7 +154,9 @@ products/         ← 每個產品一個資料夾，內含 product.yaml + images
   _template/      ← 產品 YAML 模板
 sourcing/         ← 選品參考資料
   top100.yaml     ← 2026 台日代購 Top 100 選品清單
-  radar/          ← 台灣選品雷達（discovery + validation 兩層驗證方法論）
+  shipping-costs.yaml ← 干森物流費率（內部用，不對外公開）
+  radar/          ← 品牌調研存檔（每個品牌一份 brief，避免重複調查）
+  price-refs/     ← 每 SKU 一份台灣價格來源 + 日本官網連結（操作者認證+下單用）
 scripts/          ← CLI 工具
   push.py         ← 發布到 Shopify（DRAFT，含圖片/選項/變體/價格/分類/collection）
   check.py        ← Agent-Ready 質檢
