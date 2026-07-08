@@ -50,12 +50,13 @@ price_twd: 5980
 product_name: CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋（女款）
 product_type: 潮流服飾
 published:
-  published_at: '2026-07-08T11:08:01.965673+00:00'
+  published_at: '2026-07-08T12:09:24.821909+00:00'
   shopify_id: gid://shopify/Product/8148497727597
   shopify_status: draft
-  shopify_url: https://v0orwve1oqbhzf2s-69710020717.shopifypreview.com/products_preview?preview_key=88b1cb66bb33ec5c2da275cdd8afefa2
+  shopify_url: https://v0orwve1oqbhzf2s-69710020717.shopifypreview.com/products_preview?preview_key=ba47d624cac92d5ec5911be3bef4e9ff
 season: 全年
-seo_meta: CONVERSE TOKYO 品牌10週年紀念別注款，美國工作服帆布洗水加工，日本限定稀有款，BuzzBuzz日本直送台灣，正品保證。
+seo_meta: CONVERSE TOKYO 10週年紀念別注 ALL STAR J OX，美國工作服帆布洗水加工，日本稀有限定，數量有限售完不補。BuzzBuzz
+  日本直送台灣，正品保證，現正預購中。
 seo_title: CONVERSE TOKYO 10週年限定深藍帆布鞋 日本直送｜BuzzBuzz
 shopify_category: 服飾與配件 > 鞋類 > 運動鞋
 shopify_taxonomy_id: gid://shopify/TaxonomyCategory/aa-8-8
@@ -70,6 +71,7 @@ style_tags:
 tags:
 - curated:popo-select
 title_zh: 日本 CONVERSE TOKYO 10週年紀念限定 ALL STAR J OX 深藍帆布鞋 女款 | BuzzBuzz 日本選物
+url_handle: converse-tokyo-10th-allstar-j-ox-navy
 variants:
 - option: 顏色
   values:

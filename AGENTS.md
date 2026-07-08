@@ -51,6 +51,8 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
    fullName } } } }` 查，找最接近的 fullName 填進去
 9. **Collection**：所有產品自動歸進「Popo選物」這個 collection，用 collection ID
    （寫死在 `scripts/push.py` 的 `shopify_default_collection_id`，不是名稱，改名不影響）
+10. **URL Handle**：`url_handle` 必填，全英文 ASCII kebab-case，不要用中文標題自動產生
+    的 slug（中文 slug 在瀏覽器網址列會變成一長串 %E6%97%A5... 編碼）
 
 ## 工作流
 
@@ -62,6 +64,7 @@ Shopify 2026 年 6 月推出 agentic commerce：產品會自動同步到 ChatGPT
 ② 填寫基本欄位（你手動或 Claude 協助）
    品牌、進價、售價、規格、variants（顏色/尺寸，缺貨的選項直接不列進去）
    shopify_taxonomy_id 用 Admin GraphQL 查（見上面「官方分類」說明）
+   url_handle 用英文 ASCII slug 填（見上面「URL Handle」說明）
 
 ③ Claude 補完 AI 區段
    標題、描述、SEO、alt text、FAQ、schema

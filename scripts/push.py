@@ -108,6 +108,10 @@ def build_base_fields(data: dict, settings: Settings) -> dict:
     if settings.shopify_default_collection_id:
         input_data["collections"] = [settings.shopify_default_collection_id]
 
+    # URL handle：一定要是 ASCII slug，不然瀏覽器網址列會變成一長串 %E6%97%A5... 編碼
+    if data.get("url_handle"):
+        input_data["handle"] = data["url_handle"]
+
     return input_data
 
 
@@ -126,9 +130,10 @@ def build_metafields_input(product_gid: str, data: dict) -> list[dict]:
             })
 
     # Map YAML fields to metafields (correct type per field)
+    # 注意：price_gap_note 不寫進 metafields（操作者要求移除）
     text_fields = {
         "brand_jp", "brand_en", "material", "dimensions",
-        "price_gap_note", "country_of_origin", "season", "gender",
+        "country_of_origin", "season", "gender",
         "stock_status", "sourcing_status",
     }
     for k in text_fields:
