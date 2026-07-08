@@ -24,8 +24,5 @@ sourcing/
 .DS_Store
 STATUS.md
 
-# 內部規劃文檔
-tasks/top100-validation-sweep-plan.md
-tasks/xhs-trend-monitoring-plan.md
-tasks/next-agent-actionable-brands.md
-tasks/chrome-extension-spec.md
+# 內部規劃文檔（不上 GitHub）
+tasks/
