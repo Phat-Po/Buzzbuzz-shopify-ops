@@ -12,3 +12,20 @@ scripts/tmp/
 # 產品圖片不入 git（體積大）
 products/*/images/*
 !products/_template/images/.gitkeep
+
+# 實際產品資料不入 git（含成本數據）
+products/*/
+!products/_template/
+
+# 選品資料不入 git（商業機密）
+sourcing/
+
+# macOS
+.DS_Store
+STATUS.md
+
+# 內部規劃文檔
+tasks/top100-validation-sweep-plan.md
+tasks/xhs-trend-monitoring-plan.md
+tasks/next-agent-actionable-brands.md
+tasks/chrome-extension-spec.md
